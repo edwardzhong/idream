@@ -25,8 +25,6 @@
     "koa-session2": "^2.0.0",
     "koa-static": "^2.1.0",
     "koa-swig": "^2.0.0",
-    "koa-better-http-proxy":"^0.2.4",
-    "koa-http-proxy-middleware":"^0.0.2",
     "log4js": "^2.7.0"
   },
   "devDependencies":{

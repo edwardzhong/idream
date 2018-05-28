@@ -315,6 +315,10 @@ function uploadFile(e, pic) {
                 img = pic;
                 img.src = e.target.result;
                 wrap = $(pic).parent();
+                reqUploadImg(e.target.result,function(src){
+                    img.src=src; 
+                    setImgPosition(wrap, img);
+                });
             } else {
                 var img = new Image(),
                     imgHtml = '<div class="img-wrap"><i class="icon-minus-circled" title="删除"></i><div class="img"></div></div>';
@@ -323,14 +327,26 @@ function uploadFile(e, pic) {
                 wrap = $(imgHtml);
                 wrap.find('.img').append(img);
                 $('#editImgs').append(wrap);
+                reqUploadImg(e.target.result,function(src){
+                    img.src=src;
+                    setImgPosition(wrap.find('.img'), img);
+                });
                 replaceInput();
             }
-            setImgPosition(wrap, img);
         };
         fr.readAsDataURL(file);
     } else {
         showDialog({txt:'浏览器不支持上传',confirm:'确认'});
     }
+}
+
+//上传到公共api
+function reqUploadImg(img,cb){
+    sendFn({r:'/login/upload-img',img:img},function(ret){
+        if(ret.code==200&&ret.data&&ret.data.url){
+            cb(ret.data.url);
+        }
+    }); 
 }
 
 function sendFn(data,succFn,opt){

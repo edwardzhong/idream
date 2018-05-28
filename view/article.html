@@ -22,9 +22,9 @@
     <div class="actions">
         <i class="icon-eye-off private" title="私密"></i>
         <i data-tag="up" data-id="{{article.feed_id}}" class="icon-heart {% if article.hasDigg == 1%}active{% endif %}" title="比心"></i>
-        <span>{{article.digg_count}}</span>
+        <span>{% if article.digg_count == 0 %}{% else %}{{article.digg_count}}{% endif %}</span>
         <i data-tag="comment" data-id="{{article.feed_id}}" class="icon-comment" title="评论"></i>
-        <span>{{article.comment_count}}</span>
+        <span>{% if article.comment_count == 0 %}{% else %}{{article.comment_count}}{% endif %}</span>
         <i data-tag="share" class="icon-forward" title="传达"></i>
         <i data-tag="more" class="icon-ellipsis" title="更多"></i>
         <div class="down-tip" data-menu="share">
