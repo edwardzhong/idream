@@ -1,0 +1,49 @@
+<div class="actions">
+{% if type == 1 %}
+<i class="icon-eye-off private" title="私密"></i>
+{% endif %}
+<i data-tag="up" class="icon-heart" title="比心"></i>
+<span>36</span>
+<i data-tag="comment" class="icon-comment" title="评论"></i>
+<span>46</span>
+{% if type==1 or type==3 %}
+<i data-tag="share" class="icon-forward" title="传达"></i>
+{% endif %}
+{% if type == 1 or type==2 %}
+<i data-tag="more" class="icon-ellipsis" title="更多"></i>
+{% endif %}
+{% if type==1 or type==3 %}
+<div class="down-tip" data-menu="share">
+    <div class="menu">
+        <a data-tag="collect" href="javascript:;">收藏</a>
+        <!-- data-clipboard-text复制链接 -->
+        <a data-tag="copy" href="javascript:;" data-clipboard-text="/article/{{fid}}">复制链接</a>
+        <!-- data-url:配置分享用的链接 -->
+        <a class="share-icon" href="javascript:;" data-url="/article/{{fid}}">
+            <i data-tag="facebook" class="icon-facebook-squared"></i>
+            <i data-tag="weibo" class="icon-sina-weibo"></i>
+            <i data-tag="douban">豆</i>
+            <i data-tag="qq" class="icon-qq"></i>
+            <i data-tag="wechat" class="icon-wechat"></i>
+            <i data-tag="whatsapp" class="icon-whatsapp"></i>
+        </a>
+    </div>
+</div>
+{% endif %}
+{% if type == 1 %}
+<div class="down-tip" data-menu="more">
+	<div class="menu">
+		<a href="/edit_article/{{fid}}">编辑</a>
+		<a data-tag="delete" href="javascript:;">删除</a>
+		<a data-tag="private" href="javascript:;">设为私密</a>
+	</div>
+</div>
+{% endif %}
+{% if type==2 %}
+	<div class="down-tip" data-menu="more">
+		<div class="menu">
+			<a data-tag="delete" href="javascript:;">删除</a>
+		</div>
+	</div>
+{% endif %}
+</div>

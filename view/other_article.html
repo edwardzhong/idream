@@ -1,0 +1,96 @@
+{% extends '../layout/layout-other.html' %}
+{% block title %}他的文章-iDream{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="./lib/viewer/viewer.css">
+{% endblock %}
+{% block js %}
+<script src="./lib/viewer/viewer.js"></script>
+<script src="./js/base.js"></script>
+<script src="./js/other_article.js"></script>
+{% endblock %}
+{% block left %}
+{% include './partial/other-info.html'%}
+{% endblock %}
+{% block middle %}
+<div class="view-article">
+	<div class="title"><time class="fr">时间 昨天</time><h3>梦境题目title</h3></div>
+	<div id="viewImgs" class="img-list">
+		<div class="img"><img src="./img/avatar.jpg" alt=""></div>
+		<div class="img"><img src="./img/avatar.jpg" alt=""></div>
+		<div class="img"><img src="./img/avatar.jpg" alt=""></div>
+    </div>
+	<p class="text"> 如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦 
+
+	111如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦</p>
+	{% include './partial/actions.html' with {type:3} %}
+</div>
+<ul class="comment-list">
+    <li>
+        <div class="avatar-wrap">
+            <a href="index.html" class="avatar">
+                <img src="./img/avatar.jpg" alt="">
+            </a>            
+        </div>
+        <div class="dream-wrap">
+        	<div class="title">
+        		<time class="fr">时间 昨天</time>
+        		<a href="index.html"><span>我的名字</span></a>
+        	</div>
+        	<p>如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦</p>
+        	{% include './partial/actions.html' with {type:4} %}
+        </div>
+        <ul>
+        	<li>
+        		<div class="avatar-wrap">
+        			<a href="index.html" class="avatar">
+        				<img src="./img/avatar.jpg" alt="">
+        			</a>            
+        		</div>
+        		<div class="dream-wrap">
+        			<div class="title">
+        				<time class="fr">时间 昨天</time>
+        				<a href="index.html"><span>我的名字</span></a><i class="icon-comment"></i><a href="other.html"><span>other</span></a>
+        			</div>
+        			<p>如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦
+        			</p>
+        			{% include './partial/actions.html' with {type:4} %}
+        		</div>
+        	</li>
+        	<li>
+        		<div class="avatar-wrap">
+        			<a href="other.html" class="avatar">
+        				<img src="./img/avatar.jpg" alt="">
+        			</a>            
+        		</div>
+        		<div class="dream-wrap">
+        			<div class="title">
+        				<time class="fr">时间 昨天</time>
+        				<a href="other.html"><span>other</span></a><i class="icon-comment"></i><a href="index.html"><span>我的名字</span></a>
+        			</div>
+        			<p>如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦
+        			</p>
+        			{% include './partial/actions.html' with {type:4} %}
+        		</div>
+        	</li>
+        </ul>
+    </li>
+        <li>
+        <div class="avatar-wrap">
+        <a href="other.html" class="avatar">
+            <img src="./img/avatar.jpg" alt="">
+        </a>            
+        </div>
+        <div class="dream-wrap">
+            <div class="title">
+                <time class="fr">时间 昨天</time>
+                <a href="other.html"><span>other</span></a>
+            </div>
+            <p>如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦</p>
+            {% include './partial/actions.html' with {type:4} %}
+        </div>
+    </li>
+</ul>
+{% endblock %}
+{% block right %}
+
+{% endblock %}

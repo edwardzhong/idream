@@ -1,0 +1,126 @@
+{% extends './layout/layout-user.html' %}
+{% block title %}我的主页-iDream{% endblock %}
+{% block js %}
+<script src="./js/index.js"></script>
+{% endblock %}
+{% block left %}
+{% include './partial/user-info.html' %}
+{% endblock %}
+{% block middle %}
+<div class="add-article">
+    <input id="title" type="text" class="title" placeholder="梦题" maxlength="150">
+    <div id="editImgs" class="img-list clearfix"></div>
+    <div id="content" class="edit-div" placeholder="梦境" contenteditable="true" onpaste="return false" oncontextmenu="return false" ></div>
+    <div id="actions" class="actions">
+        <a id="submit" class="send" href="javascript:;" title="发布"><i class="icon-paper-plane"></i></a>
+        <a id="uploadFile" class="file-wrap" href="javascript:;" title="上传图片">
+            <i class="icon-camera"></i>
+            <input type="file" name="file">
+        </a>
+        <a id="addTag" href="javascript:;" title="自定义标签"><i class="icon-tag"></i></a>
+        <input id="tag" class="tags" placeholder="自定义标签:每个梦境最多7个标签，每个标签最多7个中文" type="text">
+    </div>
+</div>
+<ul class="article-list">
+    {% for li in list %}
+    <li>
+        <div class="avatar-wrap">
+        <div class="avatar">
+            <img src="{{li.avatar}}" alt="avatar">
+        </div>            
+        </div>
+        <div class="dream-wrap">
+            <div class="title">
+                <a href="/article/{{li.feed_id}}"><time class="fr">{{li.publish_time}}</time></a>
+                <a href="/article/{{li.feed_id}}"><h3>{{li.title}}</h3></a>
+                <span>{{li.uname}}</span>
+            </div>
+            <div class="img-list">
+                {% for img in li.imgInfo %}
+                <div class="img"><img src="{{img}}" alt=""></div>
+                {% endfor %}
+            </div>
+            <p>{{li.content}}</p>
+            <div class="actions">
+                <i class="icon-eye-off private" title="私密"></i>
+                <i data-tag="up" data-id="{{li.feed_id}}" class="icon-heart {% if li.has_digg == 1%}active{% endif %}" title="比心"></i>
+                <span>{{li.digg_count}}</span>
+                <i data-tag="comment" data-id="{{li.feed_id}}" class="icon-comment" title="评论"></i>
+                <span>{{li.comment_count}}</span>
+                <i data-tag="share" class="icon-forward" title="传达"></i>
+                <i data-tag="more" class="icon-ellipsis" title="更多"></i>
+                <div class="down-tip" data-menu="share">
+                    <div class="menu">
+                        <a data-tag="copy" href="javascript:;" data-clipboard-text="{{li.host}}/article/{{li.feed_id}}">复制链接</a>
+                        <a class="share-icon" href="javascript:;" data-url="{{li.host}}/article/{{li.feed_id}}">
+                            <i data-tag="facebook" class="icon-facebook-squared"></i>
+                            <i data-tag="weibo" class="icon-sina-weibo"></i>
+                            <i data-tag="douban">豆</i>
+                            <i data-tag="qq" class="icon-qq"></i>
+                            <i data-tag="wechat" class="icon-wechat"></i>
+                            <i data-tag="whatsapp" class="icon-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="down-tip" data-menu="more">
+                    <div class="menu">
+                        <a href="/edit/{{li.feed_id}}">编辑</a>
+                        <a data-tag="delete" data-id="{{li.feed_id}}" href="javascript:;">删除</a>
+                        <a data-tag="private" data-id="{{li.feed_id}}" href="javascript:;">设为私密</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
+{% block right %}
+<script id="liTemp" type="text/html">
+<li>
+    <div class="avatar-wrap">
+    <div class="avatar">
+        <img src="(avatar)" alt="avatar">
+    </div>            
+    </div>
+    <div class="dream-wrap">
+        <div class="title">
+            <a href="/article/(feed_id)"><time class="fr">(publish_time)</time></a>
+            <a href="/article/(feed_id)"><h3>(title)</h3></a>
+            <span>(uname)</span>
+        </div>
+        <div class="img-list">(imgs)</div>
+        <p>(content)</p>
+        <div class="actions">
+            <i class="icon-eye-off private" title="私密"></i>
+            <i data-tag="up" data-id="(feed_id)" class="icon-heart" title="比心"></i>
+            <span>(digg_count)</span>
+            <i data-tag="comment" data-id="(feed_id)" class="icon-comment" title="评论"></i>
+            <span>(comment_count)</span>
+            <i data-tag="share" class="icon-forward" title="传达"></i>
+            <i data-tag="more" class="icon-ellipsis" title="更多"></i>
+            <div class="down-tip" data-menu="share">
+                <div class="menu">
+                    <a data-tag="copy" href="javascript:;" data-clipboard-text="(host)/article/(feed_id)">复制链接</a>
+                    <a class="share-icon" href="javascript:;" data-url="(host)/article/(feed_id)">
+                        <i data-tag="facebook" class="icon-facebook-squared"></i>
+                        <i data-tag="weibo" class="icon-sina-weibo"></i>
+                        <i data-tag="douban">豆</i>
+                        <i data-tag="qq" class="icon-qq"></i>
+                        <i data-tag="wechat" class="icon-wechat"></i>
+                        <i data-tag="whatsapp" class="icon-whatsapp"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="down-tip" data-menu="more">
+                <div class="menu">
+                    <a href="/edit/(feed_id)">编辑</a>
+                    <a data-tag="delete" data-id="(feed_id)" href="javascript:;">删除</a>
+                    <a data-tag="private" data-id="(feed_id)" href="javascript:;">设为私密</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>
+</script>
+{% endblock %}

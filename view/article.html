@@ -1,0 +1,114 @@
+{% extends './layout/layout-user.html' %}
+{% block title %}我的文章-iDream{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/lib/viewer/viewer.css">
+{% endblock %}
+{% block js %}
+<script src="/lib/viewer/viewer.js"></script>
+<script src="/js/article.js"></script>
+{% endblock %}
+{% block left %}
+{% include './partial/user-info.html' %}
+{% endblock %}
+{% block middle %}
+<div class="view-article">
+	<div class="title"><time class="fr">{{article.publish_time}}</time><h3>{{article.title}}</h3></div>
+	<div id="viewImgs" class="img-list">
+        {% for img in article.imgInfo %}
+        <div class="img"><img src="{{img}}" alt=""></div>
+        {% endfor %}
+    </div>
+	<p class="text">{{article.content}}</p>
+    <div class="actions">
+        <i class="icon-eye-off private" title="私密"></i>
+        <i data-tag="up" data-id="{{article.feed_id}}" class="icon-heart {% if article.hasDigg == 1%}active{% endif %}" title="比心"></i>
+        <span>{{article.digg_count}}</span>
+        <i data-tag="comment" data-id="{{article.feed_id}}" class="icon-comment" title="评论"></i>
+        <span>{{article.comment_count}}</span>
+        <i data-tag="share" class="icon-forward" title="传达"></i>
+        <i data-tag="more" class="icon-ellipsis" title="更多"></i>
+        <div class="down-tip" data-menu="share">
+            <div class="menu">
+                <a data-tag="copy" href="javascript:;" data-clipboard-text="{{host}}/article/{{article.feed_id}}">复制链接</a>
+                <a class="share-icon" href="javascript:;" data-url="{{host}}/article/{{article.feed_id}}">
+                    <i data-tag="facebook" class="icon-facebook-squared"></i>
+                    <i data-tag="weibo" class="icon-sina-weibo"></i>
+                    <i data-tag="douban">豆</i>
+                    <i data-tag="qq" class="icon-qq"></i>
+                    <i data-tag="wechat" class="icon-wechat"></i>
+                    <i data-tag="whatsapp" class="icon-whatsapp"></i>
+                </a>
+            </div>
+        </div>
+        <div class="down-tip" data-menu="more">
+            <div class="menu">
+                <a href="/edit/{{article.feed_id}}">编辑</a>
+                <a data-tag="delete" data-id="{{article.feed_id}}" href="javascript:;">删除</a>
+                <a data-tag="private" data-id="{{article.feed_id}}" href="javascript:;">设为私密</a>
+            </div>
+        </div>
+    </div>
+</div>
+<ul class="comment-list">
+    {% for c in comments %}
+    <li>
+        <div class="avatar-wrap">
+            <a href="/user/{{c.uid}}" class="avatar">
+                <img src="{{c.avatar||'/img/avatar.jpg'}}" alt="avatar">
+            </a>
+        </div>
+        <div class="dream-wrap">
+        	<div class="title">
+        		<time class="fr">{{c.ctime}}</time>
+        		<a href="/user/{{c.uid}}"><span>{{c.uname}}</span></a>
+        	</div>
+        	<p>{{c.content}}</p>
+        	<div class="actions">
+                <i data-tag="comment" class="icon-comment" title="评论"></i><span></span>
+                {% if isSelf %}
+                <i data-tag="more" class="icon-ellipsis" title="更多"></i>
+                <div class="down-tip" data-menu="more">
+                    <div class="menu">
+                        <a data-tag="delete" href="javascript:;">删除</a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% if c.reply and c.reply.length > 0 %}
+        <ul>
+            {% for r in c.reply %}
+        	<li>
+        		<div class="avatar-wrap">
+        			<a href="/user/{{r.uid}}" class="avatar">
+        				<img src="{{r.avatar||'/img/avatar.jpg'}}" alt="avatar">
+        			</a>            
+        		</div>
+        		<div class="dream-wrap">
+        			<div class="title">
+        				<time class="fr">{{r.ctime}}</time>
+        				<a href="/user/{{r.uid}}"><span>{{r.uname}}</span></a><i class="icon-comment"></i><a href="{{r.to_uid}}"><span>{{r.to_uname}}</span></a>
+        			</div>
+        			<p>{{r.content}}</p>
+                    <div class="actions">
+                        <i data-tag="comment" class="icon-comment" title="评论"></i><span></span>
+                        {% if isSelf %}
+                        <i data-tag="more" class="icon-ellipsis" title="更多"></i>
+                        <div class="down-tip" data-menu="more">
+                            <div class="menu">
+                                <a data-tag="delete" href="javascript:;">删除</a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+        	</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
+{% block right %}
+{% endblock %}

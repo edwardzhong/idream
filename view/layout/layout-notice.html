@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>{% block title %}{% endblock %}</title>
+{% include './partial/meta.html' %}
+<link rel="stylesheet" href="./lib/fontello/fontello.css">
+<link rel="stylesheet" href="./css/index.css">
+{% block css %}{% endblock %}
+</head>
+<body>
+{% include './partial/header.html' with {isNotice:true} %}
+<div class="content clearfix">
+	<div class="left">
+		{% autoescape false %}
+		{% block left %}{% endblock %}
+		{% endautoescape %}
+	</div>
+	<div class="right">
+		{% autoescape false %}
+		{% block right %}{% endblock %}
+		{% endautoescape %}
+	</div>
+	<div class="middle">
+		{% autoescape false %}
+		{% block middle %}{% endblock %}
+		{% endautoescape %}
+	</div>
+</div>
+<div id="overlay" class="overlay"></div>
+<script src="./lib/jquery.min.js"></script>
+<script src="./lib/clipboard.min.js"></script>
+<script src="./lib/qrcode.min.js"></script>
+{% block js %}{% endblock %}
+</body>
+</html>

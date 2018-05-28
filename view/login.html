@@ -1,0 +1,67 @@
+{% extends './layout/layout.html' %}
+{% block title %}登录-iDream{% endblock %}
+{% block js %}
+<script>
+	var email=$('#email'),
+		pass=$('#pass');
+	$('#btn').on('click',function(e){
+		if(!$.trim(email.val())){
+			email.addClass('warn');
+			showDialog({txt:'账户不能为空',confirm:'确认'},function(){
+				email.focus();
+			});
+			return;
+		}
+        email.removeClass('warn');
+
+        if(!$.trim(pass.val())){
+			pass.addClass('warn');
+			showDialog({txt:'密码不能为空',confirm:'确认'},function(){
+				pass.focus();
+			});
+			return;
+		}
+		pass.removeClass('warn');
+
+		$.ajax({
+			url:'/login',
+			type:'POST',
+			dataType:'json',
+			data:{
+				r:'/login/sign',
+				email:email.val(),
+				password:pass.val()
+			},
+			success:function(data){
+				if(data.code==200){
+					location.href='/';
+				} else {
+					showDialog({txt:data.msg,confirm:'确认'},function(){
+						email.focus();
+					});
+				}
+				console.log(data);
+			},
+			error:function(err){
+				showDialog({txt:'服务器错误,请稍后再试',confirm:'确认'},function(){
+					email.focus();
+				});
+				console.log(err);
+			}
+		});
+	});
+</script>
+{% endblock %}
+{% block content %}
+<div class="sign-block">
+	<h2 class="title">Everything begin from your dreams</h2>
+	<form class="form">
+		<input id="email" class="text" type="text" placeholder="账户" maxlength="30">
+		<input id="pass" class="text" type="password" placeholder="密码" maxlength="30">
+		<input id="btn" type="button" value="登入" class="login border-btn primary-btn"><br>
+		<a class="forget" href="/forget">忘记密码</a><br>
+		<a class="register" href="/register">创建账户</a>
+	</form>
+	<a class="about" href="/about">about iDream</a>
+</div>
+{% endblock %}

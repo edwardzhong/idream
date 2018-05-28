@@ -1,0 +1,9 @@
+build/Release
+node_modules
+public/upload
+public/dist
+public/rev
+logs
+*.log
+.DS_Store
+

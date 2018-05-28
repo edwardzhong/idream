@@ -1,0 +1,43 @@
+{
+  "name": "idream_server",
+  "version": "1.0.0",
+  "description": "node server for website",
+  "main": "server.js",
+  "scripts": {
+    "build": "gulp",
+    "dev": "node --harmony --inspect app",
+    "start": "node --harmony app"
+  },
+  "keywords": [
+    "node",
+    "koa"
+  ],
+  "author": "Jeff Zhong",
+  "license": "MIT",
+  "dependencies": {
+    "co": "^4.6.0",
+    "koa": "^2.0.0",
+    "koa-body": "^2.0.0",
+    "koa-convert": "^1.2.0",
+    "koa-favicon": "^2.0.0",
+    "koa-logger": "^1.3.1",
+    "koa-router": "^7.0.0",
+    "koa-session2": "^2.0.0",
+    "koa-static": "^2.1.0",
+    "koa-swig": "^2.0.0",
+    "koa-better-http-proxy":"^0.2.4",
+    "koa-http-proxy-middleware":"^0.0.2",
+    "log4js": "^2.7.0"
+  },
+  "devDependencies":{
+    "gulp": "^3.9.1",
+    "gulp-uglify": "^2.1.0",
+    "gulp-rename": "^1.2.2",
+    "autoprefixer": "^6.7.7",
+    "gulp-clean-css": "^2.4.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-concat-css": "^2.3.0",
+    "gulp-less": "^3.3.0",
+    "gulp-postcss": "^6.3.0"
+  }
+}
