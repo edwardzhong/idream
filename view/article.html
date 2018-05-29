@@ -20,13 +20,17 @@
     </div>
 	<p class="text">{{article.content}}</p>
     <div class="actions">
-        <i class="icon-eye-off private" title="私密"></i>
+        {% if isSelf %}
+        <i class="icon-eye-off private" title="私密" style="display:{% if article.show_type ==2 %}inline{%else%}none{%endif%};"></i>
+        {% endif%}
         <i data-tag="up" data-id="{{article.feed_id}}" class="icon-heart {% if article.hasDigg == 1%}active{% endif %}" title="比心"></i>
         <span>{% if article.digg_count == 0 %}{% else %}{{article.digg_count}}{% endif %}</span>
         <i data-tag="comment" data-id="{{article.feed_id}}" class="icon-comment" title="评论"></i>
         <span>{% if article.comment_count == 0 %}{% else %}{{article.comment_count}}{% endif %}</span>
         <i data-tag="share" class="icon-forward" title="传达"></i>
+        {% if isSelf %}
         <i data-tag="more" class="icon-ellipsis" title="更多"></i>
+        {% endif%}
         <div class="down-tip" data-menu="share">
             <div class="menu">
                 <a data-tag="copy" href="javascript:;" data-clipboard-text="{{host}}/article/{{article.feed_id}}">复制链接</a>
@@ -40,13 +44,15 @@
                 </a>
             </div>
         </div>
+        {% if isSelf %}
         <div class="down-tip" data-menu="more">
             <div class="menu">
                 <a href="/edit/{{article.feed_id}}">编辑</a>
                 <a data-tag="delete" data-id="{{article.feed_id}}" href="javascript:;">删除</a>
-                <a data-tag="private" data-id="{{article.feed_id}}" href="javascript:;">设为私密</a>
+                <a data-tag="private" data-id="{{article.feed_id}}" data-type="{{li.show_type}}" href="javascript:;">设为设为{% if article.show_type ==2%}公开{%else%}私密{%endif%}</a>
             </div>
         </div>
+        {% endif%}
     </div>
 </div>
 <ul class="comment-list">
@@ -64,12 +70,12 @@
         	</div>
         	<p>{{c.content}}</p>
         	<div class="actions">
-                <i data-tag="comment" class="icon-comment" title="评论"></i><span></span>
+                <i data-tag="comment" data-rid="{{c.review_id}}" class="icon-comment" title="评论"></i><span></span>
                 {% if isSelf %}
                 <i data-tag="more" class="icon-ellipsis" title="更多"></i>
                 <div class="down-tip" data-menu="more">
                     <div class="menu">
-                        <a data-tag="delete" href="javascript:;">删除</a>
+                        <a data-tag="delete" data-rid="{{c.review_id}}" href="javascript:;">删除</a>
                     </div>
                 </div>
                 {% endif %}
@@ -91,12 +97,12 @@
         			</div>
         			<p>{{r.content}}</p>
                     <div class="actions">
-                        <i data-tag="comment" class="icon-comment" title="评论"></i><span></span>
+                        <i data-tag="comment" data-rid="{{c.review_id}} class="icon-comment" title="评论"></i><span></span>
                         {% if isSelf %}
                         <i data-tag="more" class="icon-ellipsis" title="更多"></i>
                         <div class="down-tip" data-menu="more">
                             <div class="menu">
-                                <a data-tag="delete" href="javascript:;">删除</a>
+                                <a data-tag="delete" data-rid="{{r.review_id}}" href="javascript:;">删除</a>
                             </div>
                         </div>
                         {% endif %}

@@ -22,7 +22,7 @@
             <input type="file" name="file">
         </a>
         <a id="addTag" href="javascript:;" title="自定义标签"><i class="icon-tag"></i></a>
-        <input id="tag" class="tags" placeholder="自定义标签:每个梦境最多7个标签，每个标签最多7个中文" type="text" value="">
+        <input id="tag" class="tags" placeholder="自定义标签:每个梦境最多7个标签，每个标签最多7个中文" type="text" value="{% for t in tags %}{{t}} {%endfor%}">
     </div>
 </div>
 {% endblock %}

@@ -1,3 +1,7 @@
+var FeedID='',
+    match=location.pathname.match(/\/(\d+)/),
+    FeedID=(match&&match[1])||0,
+    ReviewID='';
 
 
 //简单事件绑定
@@ -13,14 +17,41 @@ function bindEvents(){
 
 	//评论提交事件
 	$('#replyComment').on('click',function(e){
-		e.stopPropagation();
-		//todo:评论表单
+        e.stopPropagation();
+        // todo: 评论提交
+        var commentText=$('#commentText');
+        if(!$.trim(commentText.html())){
+            commentText.addClass('flash');
+            setTimeout(function() {
+                commentText.removeClass('flash');
+            }, 900);
+            return;
+        }
+        $('#loading').show();
+        $('#overlay').hide();
+        $('#comment').hide();
+        sendFn({
+            r:'/feed/review',
+            feed_id:FeedID,
+            to_review_id:ReviewID,
+            content:commentText.html()
+        },function(ret){
+            $('#loading').hide();
+            if(ret.code == 200){
+                location.reload();
+                console.log(ret);
+            } else {
+                showDialog({txt:ret.msg,confirm:'确认'});  
+            }
+        });
 	});
 
 	$('.comment-list,.view-article').on('click','[data-tag]',function(e){
 		e.stopPropagation();
-		var name=$(this).data('tag'),
-			opts={};
+        var that=$(this);
+            name = that.data('tag'),
+            rid =that.data('rid'),
+            opts = {};
 
 		switch(name){
 			case 'up':
@@ -42,24 +73,53 @@ function bindEvents(){
 					// todo: 删除
 					if(that.parents('ul').length){
 						// 删除评论
-						that.parentsUntil('ul').remove();
+						sendFn({
+							r:'/feed/del-review',
+							feed_id:FeedID,
+							review_id:rid
+						},function(ret){
+							if(ret.code == 200){
+								that.parentsUntil('ul').remove();
+							} else {
+								showDialog({txt:ret.msg,confirm:'确认'});  
+							}
+						});
+						
 					} else {
 						// 删除文章
-						location.href='index.html';
+						sendFn({
+							r:'/user/del',
+							feed_id:FeedID
+						},function(ret){
+							if(ret.code == 200){
+								location.href='/';
+							} else {
+								showDialog({txt:ret.msg,confirm:'确认'});  
+							}
+						});
 					}
 				});
 				break;
 			case 'private'://私密
-				hideDialogs();
-				// todo: 公开私密设置
-				var txt=$(this).html();
-				if(txt=='设为私密'){
-					$(this).html('设为公开');
-				} else {
-					$(this).html('设为私密');
-				}
-				$(this).parentsUntil('.actions').siblings('.private').toggle();
-				break;
+                hideDialogs();
+                var that=$(this),
+                    pri=that.parentsUntil('.actions').siblings('.private'),
+                    showType=Number(that.data('type'));
+                //todo:私密
+                sendFn({
+                    r:'/feed/set-feed-secret',
+                    feed_id:FeedID,
+                    show_type:3-showType
+                },function(ret){
+                    if(ret.code == 200){
+                        pri.toggle();
+                        that.data('type',3-showType);
+                        that.html(['设为公开','设为私密'][showType-1]);
+                    } else {
+                        showDialog({txt:ret.msg,confirm:'确认'});  
+                    }
+                });
+   				break;
 			case 'collect'://收藏
 				// todo: 收藏
 				hideDialogs();
@@ -76,6 +136,7 @@ function bindEvents(){
                 var l=wrap.offset().left,
                     w=wrap.width();
                 showComment(userNames,l,w);
+                ReviewID=rid;
                 break;
 			/**
 			 * sns分享

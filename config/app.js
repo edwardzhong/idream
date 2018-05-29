@@ -11,6 +11,6 @@ module.exports = {
         path: '/index.php',
         port: 8181
     },
-    pagesize:10
+    pageSize:10
 };
 

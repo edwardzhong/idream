@@ -2,7 +2,7 @@ const { proxy } = require('./config/app');
 const proxyFn = require('./controller/proxy');
 const indexCtr = require('./controller/index');
 const signCtr = require('./controller/sign');
-const pages=['about','login','register','forget'];
+const pages=['about','login','register','forget','tool'];
 
 module.exports = function(router) {
     router.post(proxy.filter, proxyFn)

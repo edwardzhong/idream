@@ -42,7 +42,7 @@
             </div>
             <p>{{li.content}}</p>
             <div class="actions">
-                <i class="icon-eye-off private" title="私密"></i>
+                <i class="icon-eye-off private" title="私密" style="display:{% if li.show_type ==2%}inline{%else%}none{%endif%};"></i>
                 <i data-tag="up" data-id="{{li.feed_id}}" class="icon-heart {% if li.has_digg == 1%}active{% endif %}" title="比心"></i>
                 <span>{{li.digg_count}}</span>
                 <i data-tag="comment" data-id="{{li.feed_id}}" class="icon-comment" title="评论"></i>
@@ -66,7 +66,7 @@
                     <div class="menu">
                         <a href="/edit/{{li.feed_id}}">编辑</a>
                         <a data-tag="delete" data-id="{{li.feed_id}}" href="javascript:;">删除</a>
-                        <a data-tag="private" data-id="{{li.feed_id}}" href="javascript:;">设为私密</a>
+                        <a data-tag="private" data-id="{{li.feed_id}}" data-type="{{li.show_type}}" href="javascript:;">设为{% if li.show_type ==2%}公开{%else%}私密{%endif%}</a>
                     </div>
                 </div>
             </div>
@@ -123,4 +123,5 @@
     </div>
 </li>
 </script>
+<input type="hidden" name="firstCount" id="firstCount" value="{{list.length}}">
 {% endblock %}

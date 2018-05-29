@@ -11,22 +11,21 @@ exports.index = async function(ctx, next) {
     }
     let token = ctx.session.user.token,
         userForm = { r: '/user/get-user-info', token: token },
-        listForm = { r: '/user/get-user-home', token: token },
+        listForm = { r: '/user/get-user-home',page_size:config.pageSize,token: token },
         user = {},
         list = [];
     try {
-        let userRet = await request(userForm);
-        let listRet = await request(listForm);
-        userRet = JSON.parse(userRet);
-        listRet = JSON.parse(listRet);
+        let ret = await Promise.all([request(userForm), request(listForm)]),//并行请求
+            userRet = JSON.parse(ret[0]),
+            listRet = JSON.parse(ret[1]);
 
-        if (userRet.code != 200) {log.warn(userRet); }
-        if (listRet.code != 200) {log.warn(listRet); }
+        if (userRet.code != 200) { log.warn(userRet); }
+        if (listRet.code != 200) { log.warn(listRet); }
         Object.assign(user, userRet.data);
         Object.assign(list, listRet.data.feed);
         user = initUser(user);
         list = initList(list);
-        ctx.body = await ctx.render('index', { isSelf: true, isLogin: true, isNew: userRet.data.unread_count ? true : false, host: config.url, user: user, list: list });
+        ctx.body = await ctx.render('index', { isSelf: true, isLogin: true, isNew: userRet.data.unread_count ? true : false, host: config.url, user: user, list: list, total: listRet.data.count });
     } catch (err) {
         log.error(err.message.substr(0, 500));
         ctx.status = 500;
@@ -42,7 +41,7 @@ exports.user = async function(ctx, next) {
     let id = ctx.params.id;
     if (!id) return;
     let userForm = { r: '/user/get-user-info', uid: id, token: '' },
-        listForm = { r: '/user/get-user-home', uid: id, token: '' },
+        listForm = { r: '/user/get-user-home', uid: id, page_size:config.pageSize,token: '' },
         user = {},
         list = [],
         isLogin = false;
@@ -100,7 +99,7 @@ exports.edit = async function(ctx, next) {
         if (user.uid != ctx.session.user.uid) { //文章不属于该用户
             return ctx.redirect('/article/' + id);
         } else {
-            ctx.body = await ctx.render('edit', { isSelf: true, isLogin: true, isNew: user.unread_count ? true : false, host: config.url, user: user, article: ret.data.info });
+            ctx.body = await ctx.render('edit', { isSelf: true, isLogin: true, isNew: user.unread_count ? true : false, host: config.url, user: user, article: ret.data.info, tags: ret.data.tags });
         }
 
     } catch (err) {
@@ -119,7 +118,7 @@ exports.article = async function(ctx, next) {
     let id = ctx.params.id,
         token = '',
         data = { isLogin: false };
-        
+
     if (!id) return;
     if (ctx.session && ctx.session.user) {
         data.isLogin = true;
@@ -134,7 +133,7 @@ exports.article = async function(ctx, next) {
         if (ret.code != 200) { log.warn(ret); }
         Object.assign(user, ret.data.user);
         user = initUser(user);
-        if (ctx.session.user && ctx.session.user.uid == user.uid) {//当前用户的文章
+        if (ctx.session.user && ctx.session.user.uid == user.uid) { //当前用户的文章
             Object.assign(data, { isSelf: true, isNew: user.unread_count ? true : false });
         } else {
             Object.assign(data, { isOther: true, isNew: false });
