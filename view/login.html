@@ -2,8 +2,13 @@
 {% block title %}登录-iDream{% endblock %}
 {% block js %}
 <script>
-	var email=$('#email'),
+	var match=location.search.match(/rurl\=([^?=]+)/),
+		rurl='/',
+		email=$('#email'),
 		pass=$('#pass');
+	if(match&&match[1]){
+		rurl=decodeURIComponent(match[1]);
+	}
 	$('#btn').on('click',function(e){
 		if(!$.trim(email.val())){
 			email.addClass('warn');
@@ -34,7 +39,7 @@
 			},
 			success:function(data){
 				if(data.code==200){
-					location.href='/';
+					location.href=rurl;
 				} else {
 					showDialog({txt:data.msg,confirm:'确认'},function(){
 						email.focus();
