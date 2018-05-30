@@ -1,5 +1,5 @@
 {% extends './layout/layout-user.html' %}
-{% block title %}我的文章-iDream{% endblock %}
+{% block title %}{% if isSelf %}我{% else %}{{user.uname}}{% endif %}的文章-iDream{% endblock %}
 {% block css %}
 <link rel="stylesheet" href="/lib/viewer/viewer.css">
 {% endblock %}
@@ -33,8 +33,8 @@
         {% endif%}
         <div class="down-tip" data-menu="share">
             <div class="menu">
-                <a data-tag="copy" href="javascript:;" data-clipboard-text="{{host}}/article/{{article.feed_id}}">复制链接</a>
-                <a class="share-icon" href="javascript:;" data-url="{{host}}/article/{{article.feed_id}}">
+                <a data-tag="copy" href="javascript:;" data-clipboard-text="/article/{{article.feed_id}}">复制链接</a>
+                <a class="share-icon" href="javascript:;" data-url="/article/{{article.feed_id}}">
                     <i data-tag="facebook" class="icon-facebook-squared"></i>
                     <i data-tag="weibo" class="icon-sina-weibo"></i>
                     <i data-tag="douban">豆</i>
@@ -49,7 +49,7 @@
             <div class="menu">
                 <a href="/edit/{{article.feed_id}}">编辑</a>
                 <a data-tag="delete" data-id="{{article.feed_id}}" href="javascript:;">删除</a>
-                <a data-tag="private" data-id="{{article.feed_id}}" data-type="{{li.show_type}}" href="javascript:;">设为设为{% if article.show_type ==2%}公开{%else%}私密{%endif%}</a>
+                <a data-tag="private" data-id="{{article.feed_id}}" data-type="{{li.show_type}}" href="javascript:;">设为{% if article.show_type ==2%}公开{%else%}私密{%endif%}</a>
             </div>
         </div>
         {% endif%}

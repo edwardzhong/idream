@@ -240,7 +240,6 @@ function bindEvents() {
 uploadImage();
 setCopyUrl();
 bindEvents();
-scrollPage({r:'/user/get-user-home'});
-// scrollPage('/user/explore');
+scrollPage({r:'/user/get-user-home',pagehas_img:HasImg||''});
 
 

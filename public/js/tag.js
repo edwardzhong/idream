@@ -1,5 +1,6 @@
-var FeedID=0;
-
+var FeedID=0,
+    match=location.pathname.match(/\/tag\/\d+\/([^\/]+)/),
+    TagName=(match&&match[1])||'';
 
 //简单事件绑定
 function bindEvents() {
@@ -140,6 +141,26 @@ function bindEvents() {
                 FeedID=fid;
                 showComment(userNames,l,w);
                 break;
+            case 'private': //私密
+                hideDialogs();
+                var that=$(this),
+                    pri=that.parentsUntil('.actions').siblings('.private'),
+                    showType=Number(that.data('type'));
+                //todo:私密
+                sendFn({
+                    r:'/feed/set-feed-secret',
+                    feed_id:fid,
+                    show_type:3-showType
+                },function(ret){
+                    if(ret.code == 200){
+                        pri.toggle();
+                        that.data('type',3-showType);
+                        that.html(['设为公开','设为私密'][showType-1]);
+                    } else {
+                        showDialog({txt:ret.msg,confirm:'确认'});  
+                    }
+                });
+                break;
                 /**
                  * sns分享
                  */
@@ -174,5 +195,5 @@ function bindEvents() {
 }
 setCopyUrl();
 bindEvents();
-scrollPage({r:'/user/get-user-home',uid:UID,has_img:HasImg||''});
+scrollPage({ r:'/user/get-tag-feed-list',uid:UID,tag_name: TagName});
 

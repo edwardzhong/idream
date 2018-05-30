@@ -70,7 +70,8 @@ function request(form) {
 
 function initUser(user){
     let gender={'0':'不详', '1':'男', '2':'女', '3':'男男', '4':'女女', '5':'异性', '6':'双性', '7':'无性'}; 
-    user.avatar=user.avatar||'/img/avatar.jpg'; user.uname=user.uname||'未命名';
+    user.avatar=user.avatar||'/img/avatar.jpg'; 
+    user.uname=user.uname||'未命名';
     user.sex=gender[''+user.sex];
     user.age=user.age;
     user.feed_count=user.feed_count==0?'':user.feed_count;

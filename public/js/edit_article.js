@@ -1,7 +1,3 @@
-
-var FeedID=0,
-    match=location.pathname.match(/\/(\d+)/),
-    FeedID=(match&&match[1])||0;
     
 $('.img-list img').each(function(i,item){
     var wrap=$(item).parent();

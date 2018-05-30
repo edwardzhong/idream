@@ -155,7 +155,9 @@ function setImgPosition(imgWrap, img, load) {
 function setCopyUrl() {
     var btns = $('[data-tag=copy]');
     btns.each(function(i, item) {
-        var clipboard = new ClipboardJS(item);
+        var path=$(item).attr('data-clipboard-text'),
+            clipboard = new ClipboardJS(item);
+        $(item).attr('data-clipboard-text',Host+path);
         clipboard.on('success', function(e) {
             $(item).parent().parent().hide();
             showDialog({ txt: '链接已经复制到剪贴板', confirm: '确认' });
@@ -254,7 +256,7 @@ function generate(url, opts) {
         .replace(/\(sTitle\)/g, opts.sTitle)
         .replace(/\(sDesc\)/g, opts.sDesc)
         .replace(/\(sPic\)/g, encodeURIComponent(opts.sPic))
-        .replace(/\(url\)/g, encodeURIComponent(opts.url));
+        .replace(/\(url\)/g, Host+encodeURIComponent(opts.url));
 
     window.open(url);
 }
@@ -368,17 +370,13 @@ function sendFn(data, succFn, opt) {
     $.ajax(options);
 }
 
-var Host = $('#host').val() || '',
-    isLoading = false, //是否正在加载
-    pageNo = 2,
-    pageSize = 10,
-    pageTotal = Number($('#pageTotal').val() || 0),
-    firstCount = Number($('#firstCount').val() || 0),
-    isOver = firstCount < pageSize;
+var isLoading = false, //是否正在加载
+    pageNo = 1,
+    isOver = FirstCount >= PageTotal;
 
 function scrollPage(opt) {
     $('.middle').on('scroll', function(e) {
-        var options = { page: pageNo, page_size: pageSize },
+        var options = { page: pageNo+1, page_size: PageSize },
             list = $('.article-list'),
             tpl = $('#liTemp').html(),
             posTop = list.outerHeight(),
@@ -390,12 +388,12 @@ function scrollPage(opt) {
         if (mh + st > posTop - 100) {
             isLoading = true;
             sendFn(options, function(ret) {
+                console.log(ret);
                 isLoading = false;
                 if (ret.code == 200) {
-                    console.log(ret);
                     if (ret.data && ret.data.feed && ret.data.feed.length) {
-                        pageTotal = ret.data.count;
-                        if(pageNo * pageSize + ret.data.feed.length == pageTotal){
+                        PageTotal = Number(ret.data.count);
+                        if(pageNo * PageSize + ret.data.feed.length >= PageTotal){
                             isOver=true;
                         } else {
                             isOver=false;
@@ -412,7 +410,7 @@ function scrollPage(opt) {
                                 .replace(/\(content\)/, item.content)
                                 .replace(/\(digg_count\)/, item.digg_count)
                                 .replace(/\(comment_count\)/, item.comment_count)
-                                .replace(/\(host\)/g, item.host);
+                                .replace(/\(show_type\)/, item.show_type);
                             if (item.imgInfo && item.imgInfo.length) {
                                 var imgs = [];
                                 item.imgInfo.forEach(function(img) {
@@ -422,12 +420,17 @@ function scrollPage(opt) {
                             } else {
                                 li = li.replace(/\(imgs\)/, '');
                             }
+                            if(item.show_type==2){
+                                li =li.replace(/\(pstyle\)/,'inline').replace(/\(ptxt\)/,'公开');
+                            } else {
+                                li =li.replace(/\(pstyle\)/,'none').replace(/\(ptxt\)/,'私密');
+                            }
                             lis.push(li);
                         });
                         list.append(lis.join(''));
                     }
                 } else {
-                    // showDialog({txt:ret.msg,confirm:'确认'});  
+                    showDialog({txt:ret.msg,confirm:'确认'});  
                 }
             });
         }

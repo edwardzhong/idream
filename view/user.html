@@ -1,10 +1,11 @@
 {% extends './layout/layout-user.html' %}
-{% block title %}他的主页-iDream{% endblock %}
+{% block title %}{{user.uname}}的主页-iDream{% endblock %}
 {% block js %}
+<script>var HasImg='';</script>
 <script src="/js/other.js"></script>
 {% endblock %}
 {% block left %}
-{% include './partial/user-info.html' %}
+{% include './partial/user-info.html' with {isIndex:true} %}
 {% endblock %}
 {% block middle %}
 <ul class="article-list">
@@ -35,8 +36,8 @@
                 <i data-tag="share" class="icon-forward" title="传达"></i>
                 <div class="down-tip" data-menu="share">
                     <div class="menu">
-                        <a data-tag="copy" href="javascript:;" data-clipboard-text="{{li.host}}/article/{{li.feed_id}}">复制链接</a>
-                        <a class="share-icon" href="javascript:;" data-url="{{li.host}}/article/{{li.feed_id}}">
+                        <a data-tag="copy" href="javascript:;" data-clipboard-text="/article/{{li.feed_id}}">复制链接</a>
+                        <a class="share-icon" href="javascript:;" data-url="/article/{{li.feed_id}}">
                             <i data-tag="facebook" class="icon-facebook-squared"></i>
                             <i data-tag="weibo" class="icon-sina-weibo"></i>
                             <i data-tag="douban">豆</i>
@@ -74,8 +75,8 @@
             <i data-tag="share" class="icon-forward" title="传达"></i>
             <div class="down-tip" data-menu="share">
                 <div class="menu">
-                    <a data-tag="copy" href="javascript:;" data-clipboard-text="(host)/article/(feed_id)">复制链接</a>
-                    <a class="share-icon" href="javascript:;" data-url="(host)/article/(feed_id)">
+                    <a data-tag="copy" href="javascript:;" data-clipboard-text="/article/(feed_id)">复制链接</a>
+                    <a class="share-icon" href="javascript:;" data-url="/article/(feed_id)">
                         <i data-tag="facebook" class="icon-facebook-squared"></i>
                         <i data-tag="weibo" class="icon-sina-weibo"></i>
                         <i data-tag="douban">豆</i>

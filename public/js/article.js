@@ -1,7 +1,4 @@
-var FeedID='',
-    match=location.pathname.match(/\/(\d+)/),
-    FeedID=(match&&match[1])||0,
-    ReviewID='';
+var ReviewID='';
 
 
 //简单事件绑定
@@ -55,7 +52,18 @@ function bindEvents(){
 
 		switch(name){
 			case 'up':
-				$(this).toggleClass('active');
+				sendFn({
+                    r:'/feed/digg',
+                    feed_id:FeedID
+                },function(ret){
+                    $('#loading').hide();
+                    if(ret.code == 200){
+                        that.toggleClass('active');
+                        console.log(ret);
+                    } else {
+                        showDialog({txt:ret.msg,confirm:'确认'});  
+                    }
+                });
 				break;
             case 'more': //更多图标
                 hideDialogs();

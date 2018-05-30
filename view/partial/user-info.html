@@ -13,11 +13,10 @@
     <h2 class="name">{{user.uname}}</h2>
     <p class="desc">{{user.intro}}</p>
     <div class="nav">
-        <a {% if isSelf or isOther %} class="active" href="javascript:;"{% else %}href="/"{% endif %}>我的梦<span>{{user.feed_count}}</span></a>
+        <a {% if isIndex %}class="active" href="javascript:;"{% else %}href="/{%if isOther%}user/{{user.uid}}{%endif%}"{% endif %}>我的梦<span>{{user.feed_count}}</span></a>
         {% if user.feed_image_count > 0 %}
-        <a {% if isPic %} class="active"{% endif %} href="/pictures">插图<span>{{user.feed_image_count}}</span></a>
+        <a {% if isPic %}class="active"{% else %}href="/picture{%if isOther%}/{{user.uid}}{%endif%}"{% endif %}>插图<span>{{user.feed_image_count}}</span></a>
         {% endif %}
-        <!-- <a {% if isCollect %} class="active"{% endif %} href="/collection">收藏<span>{{user.wish_count}}</span></a> -->
     </div>
     <div class="info">
         <p title="性别"><i class="icon-venus-mars"></i><span>{{user.sex}}</span></p>
@@ -27,7 +26,7 @@
     </div>
     <div class="tags">
         {% for tag in user.tags %}
-        <a href="/tag/{{tag}}">{{tag}}</a>
+        <a {%if tagName == tag %}class="active"{%else%}href="/tag/{{user.uid}}/{{tag}}"{%endif%}>{{tag}}</a>
         {% endfor %}
     </div>
 </div>

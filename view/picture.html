@@ -1,27 +1,13 @@
 {% extends './layout/layout-user.html' %}
-{% block title %}我的主页-iDream{% endblock %}
+{% block title %}{% if isSelf %}我{% else %}{{user.uname}}{% endif %}的插图-iDream{% endblock %}
 {% block js %}
-<script>var HasImg='';</script>
-<script src="/js/index.js"></script>
+<script> var HasImg=2;</script>
+<script src="/js/{% if isSelf %}index.js{% else %}other.js{% endif %}"></script>
 {% endblock %}
 {% block left %}
-{% include './partial/user-info.html' with {isIndex:true}%}
+{% include './partial/user-info.html' with {isPic:true} %}
 {% endblock %}
 {% block middle %}
-<div class="add-article">
-    <input id="title" type="text" class="title" placeholder="梦题" maxlength="150">
-    <div id="editImgs" class="img-list clearfix"></div>
-    <div id="content" class="edit-div" placeholder="梦境" contenteditable="true" onpaste="return false" oncontextmenu="return false" ></div>
-    <div id="actions" class="actions">
-        <a id="submit" class="send" href="javascript:;" title="发布"><i class="icon-paper-plane"></i></a>
-        <a id="uploadFile" class="file-wrap" href="javascript:;" title="上传图片">
-            <i class="icon-camera"></i>
-            <input type="file" name="file">
-        </a>
-        <a id="addTag" href="javascript:;" title="自定义标签"><i class="icon-tag"></i></a>
-        <input id="tag" class="tags" placeholder="自定义标签:每个梦境最多7个标签，每个标签最多7个中文" type="text">
-    </div>
-</div>
 <ul class="article-list">
     {% for li in list %}
     <li>
@@ -43,13 +29,17 @@
             </div>
             <p>{{li.content}}</p>
             <div class="actions">
+                {% if isSelf %}
                 <i class="icon-eye-off private" title="私密" style="display:{% if li.show_type ==2%}inline{%else%}none{%endif%};"></i>
+                {% endif %}
                 <i data-tag="up" data-id="{{li.feed_id}}" class="icon-heart {% if li.has_digg == 1%}active{% endif %}" title="比心"></i>
                 <span>{{li.digg_count}}</span>
                 <i data-tag="comment" data-id="{{li.feed_id}}" class="icon-comment" title="评论"></i>
                 <span>{{li.comment_count}}</span>
                 <i data-tag="share" class="icon-forward" title="传达"></i>
+                {% if isSelf %}
                 <i data-tag="more" class="icon-ellipsis" title="更多"></i>
+                {% endif %}
                 <div class="down-tip" data-menu="share">
                     <div class="menu">
                         <a data-tag="copy" href="javascript:;" data-clipboard-text="/article/{{li.feed_id}}">复制链接</a>
@@ -63,6 +53,7 @@
                         </a>
                     </div>
                 </div>
+                {% if isSelf %}
                 <div class="down-tip" data-menu="more">
                     <div class="menu">
                         <a href="/edit/{{li.feed_id}}">编辑</a>
@@ -70,6 +61,7 @@
                         <a data-tag="private" data-id="{{li.feed_id}}" data-type="{{li.show_type}}" href="javascript:;">设为{% if li.show_type ==2%}公开{%else%}私密{%endif%}</a>
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
     </li>
@@ -93,13 +85,17 @@
         <div class="img-list">(imgs)</div>
         <p>(content)</p>
         <div class="actions">
+            {% if isSelf %}
             <i class="icon-eye-off private" title="私密" style="display:(pstyle);"></i>
+            {% endif %}
             <i data-tag="up" data-id="(feed_id)" class="icon-heart" title="比心"></i>
             <span>(digg_count)</span>
             <i data-tag="comment" data-id="(feed_id)" class="icon-comment" title="评论"></i>
             <span>(comment_count)</span>
             <i data-tag="share" class="icon-forward" title="传达"></i>
+            {% if isSelf %}
             <i data-tag="more" class="icon-ellipsis" title="更多"></i>
+            {% endif %}
             <div class="down-tip" data-menu="share">
                 <div class="menu">
                     <a data-tag="copy" href="javascript:;" data-clipboard-text="/article/(feed_id)">复制链接</a>
@@ -113,6 +109,7 @@
                     </a>
                 </div>
             </div>
+            {% if isSelf %}
             <div class="down-tip" data-menu="more">
                 <div class="menu">
                     <a href="/edit/(feed_id)">编辑</a>
@@ -120,6 +117,7 @@
                     <a data-tag="private" data-id="(feed_id)" data-type="(show_type)" href="javascript:;">设为(ptxt)</a>
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
 </li>
