@@ -72,8 +72,7 @@ function bindEvents() {
         },function(ret){
             $('#loading').hide();
             if(ret.code == 200){
-                location.reload();
-                console.log(ret);
+                location.href='/article/'+FeedID;
             } else {
                 showDialog({txt:ret.msg,confirm:'确认'});
             }

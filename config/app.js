@@ -3,7 +3,7 @@
  */
 module.exports = {
     env: 'env',
-    port: 3001,
+    port: 8282,
     url:'http://localhost:3001',
     proxy: {
         filter: '/api',
