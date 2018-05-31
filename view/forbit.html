@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>无法访问-iDream</title>
+{% include './partial/meta.html' %}
+<link rel="stylesheet" href="/lib/fontello/fontello.css">
+<style>{% include '../public/css/index.css' %}</style>
+<style> .content .left { border-right: none; } .content .middle { text-align: center; } .forbit { display: inline-block; margin-top: 150px; margin-left: 10px; padding: 15px 20px; border: 1px solid #aaa; border-radius: 8px; background-color: #fff; z-index: 9999; } </style>
+</head>
+<body>
+    <div class="header">
+        <div class="inner">
+            <div class="nav">
+                <a href="/"><div class="avatar"><img src="/img/avatar.jpg" alt="我的主页" title="我的主页"></div></a>
+                <a href="/notice" title="通知"><i class="icon-bell"></i></a>
+                <a href="/explore" title="探索"><i class="icon-globe"></i></a>
+                <a href="/search" title="搜索"><i class="icon-search"></i></a>
+            </div>
+            <div class="set">
+                <div id="setUp" class="setup" title="设置"><i class="icon-cog"></i>
+                    <div class="down-tip" id="setMenu">
+                        <div class="menu">
+                            <a href="/setup#about">关于</a>
+                            <a href="/setup#notice">通知</a>
+                            <a href="/setup#private">隐私</a>
+                            <a href="/setup#account">账户</a>
+                            <a href="/setup#black">黑名单</a>
+                            <a id="logOut" href="javascript:;"><i class="icon-logout"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="scrollPos" class="title">
+                <div class="avatar"><img src="/favicon.ico" alt="logo"></div>
+                <h1>iDream</h1> 
+            </div>
+        </div>
+    </div>
+    <div class="content clearfix">
+        <div class="left">
+        </div>
+        <div class="right">
+
+        </div>
+        <div class="middle">
+            <div class="forbit">该用户关闭了自己, 不公开</div>
+        </div>
+    </div>
+    <div id="overlay" class="overlay"></div>
+    <div class="overlay" style="background: rgba(0,0,0,0.1);"></div>
+    <script>{% include '../public/lib/jquery.min.js' %}</script>
+    <script>
+        function showDialog(opt, confirm, cancel) {
+            var isStr = typeof opt == 'string', txt = isStr ? opt : opt.txt, ytxt = isStr ? '确定' : opt.confirm, ctxt = isStr ? '取消' : opt.cancel || '',
+            tpl = '<div class="dialog">'
+            + '<div class="dialog-text">' + '<p>{txt}</p>' + '</div>' + '<div class="dialog-footer">' + '<a href="javascript:;" class="confirm">{confirm}</a>' + (ctxt ? '<a href="javascript:;" class="cancel">{cancel}</a>' : ''); + '</div>' + '</div>',
+            html = $(tpl.replace('{txt}', txt).replace('{confirm}', ytxt).replace('{cancel}', ctxt));
+
+            $('#overlay').show();
+            $(document.body).append(html);
+            html.find('.confirm').on('click', function(e) {
+                e.stopPropagation();
+                confirm && confirm();
+                $('#overlay').hide();
+                html.remove();
+                $('.dialog').remove();
+            });
+            html.find('.cancel').on('click', function(e) {
+                e.stopPropagation();
+                cancel && cancel();
+                $('#overlay').hide();
+                html.remove();
+            });
+        }
+ function sendFn(data, succFn, opt) { var options = { url: '/api', type: 'POST', dataType: 'json', success: function(ret) { $('#loading').hide(); showDialog({ txt: ret.msg, confirm: '确认' }); console.log(ret); }, error: function(err) { $('#loading').hide(); showDialog({ txt: '服务器错误,请稍后再试', confirm: '确认' }); console.log(err); } }; if (opt) { $.extend(options, opt); } $.extend(options, { data: data, success: succFn }); $.ajax(options); } $('#logOut').on('click', function(e) { e.stopPropagation(); showDialog('退出账户?', function() { sendFn({ r: '/login/signout' }, function(ret) { location.href = '/login'; }, { url: '/logout' }); }); }); function setHeader() { var inner = $('.header .inner'), w = ($(window).width() - inner.width()) / 2; inner.css('marginLeft', w > 0 ? w : 0); } function setSearch() { var search = $('#search'), title = $('#scrollPos'); if (search.length) { search.width(title.width() / 2 - 45); } } function setSearchNav() { var nav = $('#serachNav'), middle = $('.middle'), l = middle.offset().left, w = middle.width(); if (nav.length) { nav.css({ left: l, width: w }); } } function setTagWidth() { var act = $('#actions'); if (act.length) { act.find('.tags').width(act.width() - 90); } } $(window).on('resize', function() { $('#blackMenu').hide(); setHeader(); setSearch(); setSearchNav(); setTagWidth(); }); setHeader(); setSearch(); setSearchNav(); setTagWidth();
+    </script>
+</body>
+</html>
+
+

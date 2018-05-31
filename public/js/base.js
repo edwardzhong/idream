@@ -410,7 +410,7 @@ function scrollPage(opt) {
                                 .replace(/\(content\)/, item.content)
                                 .replace(/\(digg_count\)/, item.digg_count)
                                 .replace(/\(comment_count\)/, item.comment_count)
-                                .replace(/\(show_type\)/, item.show_type);
+                                .replace(/\(show_type\)/, item.show_type||'');
                             if (item.imgInfo && item.imgInfo.length) {
                                 var imgs = [];
                                 item.imgInfo.forEach(function(img) {
@@ -420,7 +420,7 @@ function scrollPage(opt) {
                             } else {
                                 li = li.replace(/\(imgs\)/, '');
                             }
-                            if(item.show_type==2){
+                            if(item.show_type && item.show_type == 2){
                                 li =li.replace(/\(pstyle\)/,'inline').replace(/\(ptxt\)/,'公开');
                             } else {
                                 li =li.replace(/\(pstyle\)/,'none').replace(/\(ptxt\)/,'私密');
@@ -442,7 +442,6 @@ function initList(list) {
         i.avatar = i.avatar || '/img/avatar.jpg';
         i.digg_count = i.digg_count == 0 ? '' : i.digg_count;
         i.comment_count = i.comment_count == 0 ? '' : i.comment_count;
-        i.host = Host;
         return i;
     });
 }

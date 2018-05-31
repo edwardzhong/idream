@@ -20,10 +20,7 @@
 <script>{% include '../../public/lib/jquery.min.js' %}</script>
 <script>
 function showDialog(opt, confirm, cancel) {
-    var isStr = typeof opt == 'string',
-        txt = isStr ? opt : opt.txt,
-        ytxt = isStr ? '确定' : opt.confirm,
-        ctxt = isStr ? '取消' : opt.cancel||'',
+    var isStr = typeof opt == 'string', txt = isStr ? opt : opt.txt, ytxt = isStr ? '确定' : opt.confirm, ctxt = isStr ? '取消' : opt.cancel||'',
         tpl = '<div class="dialog"><div class="dialog-text"><p>{txt}</p></div><div class="dialog-footer"><a href="javascript:;" class="confirm">{confirm}</a>'
         + (ctxt?'<a href="javascript:;" class="cancel">{cancel}</a>':'') + '</div></div>',
         html = $(tpl.replace('{txt}', txt).replace('{confirm}', ytxt).replace('{cancel}', ctxt));

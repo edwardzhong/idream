@@ -8,6 +8,9 @@
 {% include './partial/user-info.html' with {isIndex:true} %}
 {% endblock %}
 {% block middle %}
+{% if !list.length %}
+<div class="no-list">没有文章</div>
+{% else %}
 <ul class="article-list">
     {% for li in list %}
     <li>
@@ -52,6 +55,7 @@
     </li>
     {% endfor %}
 </ul>
+{%endif%}
 <script id="liTemp" type="text/html">
 <li>
     <div class="avatar-wrap">
