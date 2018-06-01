@@ -105,14 +105,16 @@
     </div>
 </div>
 <script>
-	var Host='{{host}}',
-		PageTotal={{total||0}},
-		PageSize={{pageSize||0}},
-		FirstCount={{count||0}},
-		Fmatch=location.pathname.match(/\/(article|edit)\/(\d+)/),
-		Umatch=location.pathname.match(/\/(user|picture|tag)\/(\d+)/),
-		FeedID=(Fmatch&&Fmatch[2])||0,
-		UID=(Umatch&&Umatch[2])||0;
+var Host='{{host}}',
+	PageTotal={{total||0}},
+	PageSize={{pageSize||0}},
+	FirstCount={{count||0}},
+	Fmatch=location.pathname.match(/\/(article|edit)\/(\d+)/),
+	Umatch=location.pathname.match(/\/(user|picture|tag)\/(\d+)/),
+	FeedID=(Fmatch&&Fmatch[2])||0,
+	UID=(Umatch&&Umatch[2])||0;
+
+function setHeader() { var inner = $('.header .inner'), w = ($(window).width() - inner.width()) / 2; inner.css('marginLeft', w > 0 ? w : 0); } function setSearch() { var search = $('#search'), title = $('#scrollPos'); if (search.length) { search.width(title.width() / 2 - 45); } } function setSearchNav() { var nav = $('#serachNav'), middle = $('.middle'), l = middle.offset().left, w = middle.width(); if (nav.length) { nav.css({ left: l, width: w }); } } function setTagWidth() { var act = $('#actions'); if (act.length) { act.find('.tags').width(act.width() - 90); } } $(window).on('resize', function() { $('#blackMenu').hide(); setHeader(); setSearch(); setSearchNav(); setTagWidth(); }); setHeader(); setSearch(); setSearchNav(); setTagWidth();
 </script>
 <script>{% include '../../public/lib/jquery.min.js' %}</script>
 <script>{% include '../../public/lib/clipboard.min.js' %}</script>
