@@ -438,6 +438,8 @@ function scrollPage(opt) {
                         });
                         list.append(lis.join(''));
                         setCopyUrl();
+                        $('.article-list li').off();
+                        setContent();
                     }
                 } else {
                     showDialog({txt:ret.msg,confirm:'确认'});  
@@ -447,6 +449,15 @@ function scrollPage(opt) {
     });
 }
 
+function setContent(){
+    $('.article-list li').on('click', 'p', function() {
+        $(this).addClass('show');
+    });
+
+    $('.article-list li').on('dblclick', 'p', function() {
+        $(this).removeClass('show');
+    });
+}
 function initList(list) {
     return list.map(function(i) {
         i.avatar = i.avatar || '/img/avatar.jpg';

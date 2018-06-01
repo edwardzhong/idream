@@ -236,6 +236,8 @@ function scrollPage(opt) {
                         });
                         list.append(lis.join(''));
                         setCopyUrl();
+                        $('.article-list li').off();
+                        setContent();
                     }
                 } else {
                     showDialog({txt:ret.msg,confirm:'确认'});  
