@@ -44,11 +44,12 @@ async function resIndex(ctx, next, name) {
         let data = {
             isSelf: true,
             isLogin: true,
-            isNew: userRet.data.unread_count ? true : false,
+            isNew: user.unread_count ? true : false,
             user: user,
+            self: user,
             list: list,
-            count: listRet.data.feed.length,
-            total: listRet.data.count
+            count: list.length,
+            total: Number(listRet.data.count)
         };
         Object.assign(data, globleConfig);
         ctx.body = await ctx.render(name ? name : 'index', data);
@@ -77,22 +78,35 @@ exports.picture = async function(ctx, next) {
 async function resUser(ctx, next, name) {
     let id = ctx.params.id;
     if (!id) return;
-    let userForm = { r: '/user/get-user-info', uid: id, token: '' },
-        listForm = { r: '/user/get-user-home', uid: id, page_size: config.pageSize, token: '' },
+    let selfForm = { r: '/user/get-user-info' }
+    userForm = { r: '/user/get-user-info', uid: id },
+        listForm = { r: '/user/get-user-home', uid: id, page_size: config.pageSize },
+        self = {},
         user = {},
         list = [],
-        isLogin = false;
+        count = 0,
+        data = {
+            isLogin: false,
+            isNew: false
+        };
 
     if (name) { listForm.has_img = 2; }
-    if (ctx.session && ctx.session.user) {
-        if (ctx.session.user.uid == id) { //与当前登录用户id相同
-            return ctx.redirect(name ? '/picture' : '/');
-        }
-        isLogin = true;
-        userForm.token = ctx.session.user.token;
-        listForm.token = ctx.session.user.token;
-    }
     try {
+        if (ctx.session && ctx.session.user) {
+            data.isLogin = true;
+            selfForm.token = ctx.session.user.token;
+            userForm.token = ctx.session.user.token;
+            listForm.token = ctx.session.user.token;
+            if (ctx.session.user.uid == id) { //与当前登录用户id相同
+                return ctx.redirect(name ? '/picture' : '/');
+            } else {
+                let selfRet = await request(selfForm);
+                selfRet = JSON.parse(selfRet);
+                if (selfRet.code != 200) { log.warn(selfRet); }
+                Object.assign(self, selfRet.data);
+                self = initUser(self);
+            }
+        }
         let ret = await Promise.all([request(userForm), request(listForm)]), //并行请求
             userRet = JSON.parse(ret[0]),
             listRet = JSON.parse(ret[1]);
@@ -100,19 +114,22 @@ async function resUser(ctx, next, name) {
         if (userRet.code != 200) { log.warn(userRet); }
         if (listRet.code != 200) { log.warn(listRet); }
         Object.assign(user, userRet.data);
-        Object.assign(list, listRet.data.feed);
+        if (listRet.data && listRet.data.feed) {
+            Object.assign(list, listRet.data.feed);
+            count = Number(listRet.data.count || 0);
+        }
         user = initUser(user);
         list = initList(list);
-        let data = {
+        if (!self.uid) { Object.assign(self, user); }
+        Object.assign(data, {
             isOther: true,
-            isNew: false,
-            isLogin: isLogin,
+            isNew: self.unread_count ? true : false,
+            self: self,
             user: user,
             list: list,
-            count: listRet.data.feed.length,
-            total: listRet.data.count
-        };
-        Object.assign(data, globleConfig);
+            count: list.length,
+            total: count
+        }, globleConfig);
         ctx.body = await ctx.render(name ? name : 'user', data);
     } catch (err) {
         log.error(userForm);
@@ -123,6 +140,81 @@ async function resUser(ctx, next, name) {
         ctx.res.end(err.message);
     }
 }
+
+
+/**
+ * tag list
+ */
+exports.tag = async function(ctx, next) {
+    let uid = ctx.params.uid,
+        tag = ctx.params.tag,
+        selfForm = { r: '/user/get-user-info' },
+        userForm = { r: '/user/get-user-info', uid: uid },
+        listForm = { r: '/user/get-tag-feed-list', uid: uid, tag_name: tag, page_size: config.pageSize },
+        user = {},
+        self = {},
+        list = [];
+    count = 0,
+        data = {
+            isLogin: false,
+            isNew: false
+        };
+
+    if (!uid || !tag) return;
+    try {
+        if (ctx.session && ctx.session.user) {
+            data.isLogin = true;
+            selfForm.token = ctx.session.user.token;
+            userForm.token = ctx.session.user.token;
+            listForm.token = ctx.session.user.token;
+            if (ctx.session.user.uid == uid) { //访问的是当前用户
+                data.isSelf = true;
+            } else {
+                data.isOther = true;
+                let selfRet = await request(selfForm);
+                selfRet = JSON.parse(selfRet);
+                Object.assign(self, selfRet.data);
+                self = initUser(self);
+            }
+        } else {
+            data.isOther = true;
+        }
+
+        let ret = await Promise.all([request(userForm), request(listForm)]),
+            userRet = JSON.parse(ret[0]),
+            listRet = JSON.parse(ret[1]);
+
+        if (userRet.code != 200) { log.warn(userRet); }
+        if (listRet.code != 200) { log.warn(listRet); }
+        Object.assign(user, userRet.data);
+        if (listRet.data && listRet.data.feed) {
+            Object.assign(list, listRet.data.feed);
+            count = Number(listRet.data.count || 0);
+        }
+
+        user = initUser(user);
+        list = initList(list);
+        if (!self.uid) { Object.assign(self, user); }
+        Object.assign(data, {
+            tagName: tag,
+            isNew: self.unread_count ? true : false,
+            self: self,
+            user: user,
+            list: list,
+            count: list.length,
+            total: count
+        }, globleConfig);
+
+        ctx.body = await ctx.render('tag', data);
+    } catch (err) {
+        log.error(userForm);
+        log.error(listForm);
+        log.error(err.message.substr(0, 500));
+        ctx.status = 500;
+        ctx.statusText = 'Internal Server Error';
+        ctx.res.end(err.message);
+    }
+};
 
 /**
  * edit article
@@ -151,6 +243,7 @@ exports.edit = async function(ctx, next) {
                 isLogin: true,
                 isNew: user.unread_count ? true : false,
                 user: user,
+                self: user,
                 article: ret.data.info,
                 tags: ret.data.tags
             };
@@ -172,29 +265,42 @@ exports.edit = async function(ctx, next) {
  */
 exports.article = async function(ctx, next) {
     let id = ctx.params.id,
-        token = '',
+        selfForm = { r: '/user/get-user-info' },
+        form = { r: '/feed/feed-info', feed_id: id },
+        self = {},
+        user = {},
         data = { isLogin: false };
 
     if (!id) return;
     if (ctx.session && ctx.session.user) {
         data.isLogin = true;
-        token = ctx.session.user.token;
+        selfForm.token = ctx.session.user.token;
+        form.token = ctx.session.user.token;
     }
-    let form = { r: '/feed/feed-info', feed_id: id, token: token },
-        ret = {},
-        user = {};
     try {
-        ret = await request(form);
+        let ret = await request(form);
         ret = JSON.parse(ret);
         if (ret.code != 200) { log.warn(ret); }
         Object.assign(user, ret.data.user);
         user = initUser(user);
         if (ctx.session.user && ctx.session.user.uid == user.uid) { //当前用户的文章
-            Object.assign(data, { isSelf: true, isNew: user.unread_count ? true : false });
+            data.isSelf = true;
         } else {
-            Object.assign(data, { isOther: true, isNew: false });
+            let selfRet = await request(selfForm);
+            selfRet = JSON.parse(selfRet);
+            Object.assign(self, selfRet.data);
+            self = initUser(self);
+            data.isOther = true;
         }
-        Object.assign(data, { user: user, article: ret.data.info, comments: ret.data.review }, globleConfig);
+        if (!self.uid) { Object.assign(self, user); }
+        Object.assign(data, {
+            isNew: self.unread_count ? true : false,
+            self: self,
+            user: user,
+            article: ret.data.info,
+            comments: ret.data.review
+        }, globleConfig);
+
         ctx.body = await ctx.render('article', data);
     } catch (err) {
         log.error(form);
@@ -205,62 +311,80 @@ exports.article = async function(ctx, next) {
     }
 };
 
-
 /**
- * tag list
+ * explore
  */
-exports.tag = async function(ctx, next) {
-    let uid = ctx.params.uid,
-        tag = ctx.params.tag,
-        token = '',
-        data={
-            isLogin : false,
-            isNew : false    
-        };
+exports.explore = async function(ctx, next) {
+    let form = { r: '/feed/explore', page_size: config.pageSize },
+        selfForm = { r: '/user/get-user-info' },
+        self = {},
+        list = [],
+        count = 0,
+        data = { isLogin: false, isExplore: true, isNew: false };
 
-    if (!uid || !tag) return;
-    if (ctx.session && ctx.session.user) {
-        data.isLogin = true;
-        token = ctx.session.user.token;
-        if (ctx.session.user.uid == uid) {
-            data.isSelf = true;
-        } else {
-            data.isOther = true;
-        }
-    } else {
-        data.isOther = true;
-    }
-    let userForm = { r: '/user/get-user-info', uid: uid, token: token },
-        listForm = { r: '/user/get-tag-feed-list', uid: uid, tag_name: tag, page_size: config.pageSize, token: token },
-        user = {},
-        list = [];
     try {
-        let ret = await Promise.all([request(userForm), request(listForm)]), //并行请求
-            userRet = JSON.parse(ret[0]),
-            listRet = JSON.parse(ret[1]);
+        if (ctx.session && ctx.session.user) {
+            form.token = ctx.session.user.token;
+            selfForm.token = ctx.session.user.token;
+            let self = await request(selfForm);
+            self = JSON.parse(self);
+            if (self.code != 200) { log.warn(self); }
+            Object.assign(self, self.data);
+            self = initUser(self);
+            data.isLogin = true;
 
-        if (userRet.code != 200) { log.warn(userRet); }
+        }
+        let listRet = await request(form);
+        listRet = JSON.parse(listRet);
         if (listRet.code != 200) { log.warn(listRet); }
-        Object.assign(user, userRet.data);
-        Object.assign(list, listRet.data.feed||[]);
-        user = initUser(user);
+        if (listRet.data && listRet.data.data) {
+            Object.assign(list, listRet.data.data);
+            count = Number(listRet.data.count || 0);
+        }
+
         list = initList(list);
-        if (data.isLogin && data.isSelf && user.unread_count) { data.isNew = true; }
         Object.assign(data, {
-            tagName:tag,
-            user: user,
+            isNew: self.unread_count ? true : false,
+            self: self,
             list: list,
-            count: listRet.data.feed.length,
-            total: listRet.data.count
+            count: list.length,
+            total: count
         }, globleConfig);
 
-        ctx.body = await ctx.render('tag', data);
+        ctx.body = await ctx.render('explore', data);
     } catch (err) {
+        log.error(form);
         log.error(userForm);
-        log.error(listForm);
         log.error(err.message.substr(0, 500));
         ctx.status = 500;
         ctx.statusText = 'Internal Server Error';
         ctx.res.end(err.message);
     }
 };
+
+/**
+ * notice
+ */
+exports.notice=async function(ctx,next){
+    if (!ctx.session || !ctx.session.user) {
+        return ctx.redirect('/login');
+    }
+    let selfForm = { r: '/user/get-user-info',token: ctx.session.user.token},
+        listForm = { r:'/user/get-user-msg',page_size:config.pageSize,token:ctx.session.user.token},
+        self={},
+        list=[];
+        let data = {
+            isSelf: true,
+            isLogin: true,
+            isNew: user.unread_count ? true : false,
+            user: user,
+            self: user,
+            list: list,
+            count: list.length,
+            total: Number(listRet.data.count)
+        };
+        Object.assign(data, globleConfig);
+
+};
+
+

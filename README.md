@@ -1,8 +1,8 @@
 ### 安装
 
 ```bash
-npm install -g cnpm --registry=https://registry.npm.taobao.org
-cnpm install
+npm config set registry https://registry.npm.taobao.org --global
+npm install
 ```
 
 ### 启动项目

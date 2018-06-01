@@ -12,7 +12,7 @@
 	<div class="inner">
 		<div class="nav">
 			{% if isLogin %}
-			<a {% if isSelf %}class="active"{% endif %} href="/"><div class="avatar"><img src="{{user.avatar}}" alt="我的主页" title="我的主页"></div></a>
+			<a {% if isSelf %}class="active"{% endif %} href="/"><div class="avatar"><img src="{{self.avatar}}" alt="我的主页" title="我的主页"></div></a>
 			<a {% if isNotice %} class="active"{% endif %} 
 				{% if isNew %} class="new"{% endif %}
 			href="/notice" title="通知"><i class="icon-bell"></i></a> 

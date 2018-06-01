@@ -2,13 +2,67 @@
 <html lang="en">
 <head>
 <title>{% block title %}{% endblock %}</title>
-{% include './partial/meta.html' %}
-<link rel="stylesheet" href="./lib/fontello/fontello.css">
-<link rel="stylesheet" href="./css/index.css">
+{% include '../partial/meta.html' %}
+<link rel="stylesheet" href="/lib/fontello/fontello.css">
+<style>{% include '../../public/css/index.css' %}</style>
 {% block css %}{% endblock %}
 </head>
 <body>
-{% include './partial/header.html' with {isSearch:true} %}
+<div class="header">
+	<div class="inner">
+		<div class="nav">
+			{% if isLogin %}
+			<a {% if isSelf %}class="active"{% endif %} href="/"><div class="avatar"><img src="{{user.avatar}}" alt="我的主页" title="我的主页"></div></a>
+			<a {% if isNotice %} class="active"{% endif %} 
+				{% if isNew %} class="new"{% endif %}
+			href="/notice" title="通知"><i class="icon-bell"></i></a> 
+			<a {% if isExplore %}class="active"{% endif %} href="/explore" title="探索"><i class="icon-globe"></i></a>
+			<a {% if isSearch %}class="active"{% endif %} href="/search" title="搜索"><i class="icon-search"></i></a>
+			{% endif %}
+		</div>
+		<div class="set">
+			{% if isLogin %}
+			<div id="setUp" class="setup" title="设置"><i class="icon-cog"></i>
+				<div class="down-tip" id="setMenu">
+					<div class="menu">
+						<a href="/setup#about">关于</a>
+						<a href="/setup#notice">通知</a>
+						<a href="/setup#private">隐私</a>
+						<a href="/setup#account">账户</a>
+						<a href="/setup#black">黑名单</a>
+						<a id="logOut" href="javascript:;"><i class="icon-logout"></i></a>
+					</div>
+				</div>
+			</div>
+			{% else %}
+			<a href="/login">登录</a> | <a href="/register">创建账号</a>
+			{% endif %}
+		</div>
+		<div id="scrollPos" class="title">
+			<div class="avatar"><img src="/favicon.ico" alt="logo"></div>
+			<h1>iDream</h1>	
+		</div>
+		{% if isSearch %}
+		<div id="search" class="search-wrap">
+			<input type="text" placeholder="搜索">
+			<ul class="tip">
+				<li class="clearfix"><span>梦境</span>
+					<p></p>
+				</li>
+				<li class="clearfix"><span>用户</span>
+					<p></p>
+				</li>
+				<li class="clearfix"><span>插画</span>
+					<p></p>
+				</li>
+				<li class="clearfix"><span>我的</span>
+					<p></p>
+				</li>
+			</ul>
+		</div>
+		{% endif %}
+	</div>
+</div>
 <div class="content clearfix">
 	<div class="left">
 		{% autoescape false %}
@@ -28,7 +82,7 @@
 </div>
 <div id="comment" class="comment">
 	<a class="close" href="javascript:;"><i class="icon-minus-circled"></i></a><p>回复</p>
-	<div id="commentText" class="edit-div comment-text" placeholder="评论" contenteditable="true"></div>
+	<div id="commentText" class="edit-div comment-text" placeholder="评论" contenteditable="true" onpaste="return false" oncontextmenu="return false"></div>
 	<span></span>
 	<i id="replyComment" class="icon-paper-plane"></i>
 </div>
@@ -42,12 +96,28 @@
 <div id="popImg" class="pop-img"><p>双击或回车截取图像</p><a class="close" href="javascript:;">【取消】</a></div>
 <div id="blackMenu" class="down-tip">
 	<div class="menu">
-		<a data-tag="private" href="javascript:;">加入黑名单</a>
+		<a data-tag="black" href="javascript:;">{% if user.is_black %}解除黑名单{%else%}加入黑名单{%endif%}</a>
 	</div>
 </div>
-<script src="./lib/jquery.min.js"></script>
-<script src="./lib/clipboard.min.js"></script>
-<script src="./lib/qrcode.min.js"></script>
+<div id="loading" class="overlay" style="background-color: rgba(0,0,0,.2);">
+    <div class="loading">
+        <div class="round"></div>
+    </div>
+</div>
+<script>
+	var Host='{{host}}',
+		PageTotal={{total||0}},
+		PageSize={{pageSize||0}},
+		FirstCount={{count||0}},
+		Fmatch=location.pathname.match(/\/(article|edit)\/(\d+)/),
+		Umatch=location.pathname.match(/\/(user|picture|tag)\/(\d+)/),
+		FeedID=(Fmatch&&Fmatch[2])||0,
+		UID=(Umatch&&Umatch[2])||0;
+</script>
+<script>{% include '../../public/lib/jquery.min.js' %}</script>
+<script>{% include '../../public/lib/clipboard.min.js' %}</script>
+<script>{% include '../../public/lib/qrcode.min.js' %}</script>
+<script>{% include '../../public/js/base.js' %}</script>
 {% block js %}{% endblock %}
 </body>
 </html>

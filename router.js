@@ -14,6 +14,8 @@ module.exports = function(router) {
         .get('/picture/:id', indexCtr.picture)
         .get('/picture', indexCtr.mypicture)
         .get('/tag/:uid/:tag', indexCtr.tag)
+        .get('/explore', indexCtr.explore)
+        .get('/notice', indexCtr.notice)
         .post('/login', signCtr.login)
         .post('/register', signCtr.register)
         .post('/logout', signCtr.logout);

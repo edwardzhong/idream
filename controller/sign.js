@@ -51,6 +51,10 @@ exports.register = async function(ctx, next) {
  */
 exports.logout = async function(ctx, next) {
     let form = ctx.request.body;
+    if(ctx.session && ctx.session.user){
+        form.token = ctx.session.user.token;
+    }
+
     try {
         let ret = await request(form);
         ret = JSON.parse(ret);

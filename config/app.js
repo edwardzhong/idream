@@ -4,7 +4,7 @@
 module.exports = {
     env: 'env',
     port: 8282,
-    url:'http://localhost:3001',
+    url:'http://localhost:8282',
     proxy: {
         filter: '/api',
         host: '118.31.61.9',

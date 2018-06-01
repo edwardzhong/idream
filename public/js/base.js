@@ -155,17 +155,21 @@ function setImgPosition(imgWrap, img, load) {
 function setCopyUrl() {
     var btns = $('[data-tag=copy]');
     btns.each(function(i, item) {
-        var path=$(item).attr('data-clipboard-text'),
-            clipboard = new ClipboardJS(item);
-        $(item).attr('data-clipboard-text',Host+path);
-        clipboard.on('success', function(e) {
-            $(item).parent().parent().hide();
-            showDialog({ txt: '链接已经复制到剪贴板', confirm: '确认' });
-        });
+        var set=$(item).data('set')||false;
+        if(!set){
+            var path=$(item).attr('data-clipboard-text'),
+                clipboard = new ClipboardJS(item);
+            $(item).attr('data-clipboard-text',Host+path);
+            $(item).data('set','1');
+            clipboard.on('success', function(e) {
+                $(item).parent().parent().hide();
+                showDialog({ txt: '链接已经复制到剪贴板', confirm: '确认' });
+            });
 
-        clipboard.on('error', function(e) {
-            console.log(e);
-        });
+            clipboard.on('error', function(e) {
+                console.log(e);
+            });            
+        }
     });
 }
 
@@ -420,6 +424,11 @@ function scrollPage(opt) {
                             } else {
                                 li = li.replace(/\(imgs\)/, '');
                             }
+                            if(item.has_digg==1){
+                                li =li.replace(/\(has_digg\)/,'active');
+                            } else {
+                                li =li.replace(/\(has_digg\)/,'');
+                            }
                             if(item.show_type && item.show_type == 2){
                                 li =li.replace(/\(pstyle\)/,'inline').replace(/\(ptxt\)/,'公开');
                             } else {
@@ -428,6 +437,7 @@ function scrollPage(opt) {
                             lis.push(li);
                         });
                         list.append(lis.join(''));
+                        setCopyUrl();
                     }
                 } else {
                     showDialog({txt:ret.msg,confirm:'确认'});  
