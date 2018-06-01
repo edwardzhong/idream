@@ -330,9 +330,7 @@ exports.explore = async function(ctx, next) {
             self = JSON.parse(self);
             if (self.code != 200) { log.warn(self); }
             Object.assign(self, self.data);
-            self = initUser(self);
             data.isLogin = true;
-
         }
         let listRet = await request(form);
         listRet = JSON.parse(listRet);
@@ -343,6 +341,7 @@ exports.explore = async function(ctx, next) {
         }
 
         list = initList(list);
+        self = initUser(self);
         Object.assign(data, {
             isNew: self.unread_count ? true : false,
             self: self,
@@ -384,7 +383,6 @@ exports.notice=async function(ctx,next){
             total: Number(listRet.data.count)
         };
         Object.assign(data, globleConfig);
-
 };
 
 
