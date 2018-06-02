@@ -5,6 +5,7 @@ public/dist
 public/less
 public/rev
 logs
+gulpfile.js
 *.log
 .DS_Store
 
