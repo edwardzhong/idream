@@ -42,7 +42,7 @@
         </div>
         <div class="account">
             <h3>更改登录密码</h3>
-            <form class="form">
+            <div class="form">
                 <div class="control-group">
                     <input id="oldPass" type="password" placeholder="原密码" maxlength="100">
                 </div>
@@ -55,18 +55,18 @@
                 <div class="control-group clearfix">
                     <button id="btnPass" class="border-btn primary-btn">保存</button>
                 </div>
-            </form>
+            </div>
 
             <h3>更改登录邮箱</h3>
-            <form class="form">
+            <div class="form">
                 <div class="control-group">
                     <input id="email" type="text" placeholder="原邮箱:发送验证码" maxlength="100"><br>
                 </div>
                 <div class="control-group clearfix">
                     <button id="btnEmail" class="border-btn">发送</button>
                 </div>
-            </form>
-            <form class="form">
+            </div>
+            <div class="form">
                 <div class="control-group">
                     <input id="code" type="text" placeholder="验证码" maxlength="100">
                 </div>
@@ -79,7 +79,7 @@
                 <div class="control-group clearfix">
                     <button id="btnSave" class="border-btn primary-btn">保存</button>
                 </div>
-            </form>
+            </div>
         </div>
         <div class="black">
             {% if !ruser.black_list or !ruser.black_list.length %}

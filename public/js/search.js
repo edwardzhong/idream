@@ -21,12 +21,12 @@
             firstLoad=false;
         }
     }
-
     function activePage(name){
-        $('.search-pages>div').hide();
-        $('.search-pages').find('[data-tag='+name+']').show();
+        var page = $('.search-pages').find('[data-tag='+name+']');
+        page.show().siblings().hide();
         $('#serachNav').find('[data-tag='+name+']').addClass('active').siblings('.active').removeClass('active');
     }
+
 
     $(window).on('hashchange', function(e) {
         selectHash(location.hash.replace('#', ''));

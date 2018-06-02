@@ -24,8 +24,8 @@
     }
 
     function activePage(name){
-        $('.pages>div').hide();
-        $('.pages .'+name).show();
+        var page = $('.pages .'+name);
+        page.show().siblings().hide();
         $('.nav [data-tag='+name+']').addClass('active').siblings('.active').removeClass('active');
     }
 
@@ -44,6 +44,7 @@
         setTextWarn.call(this,this.innerHTML,150);
     });
     $('#btnAbout').on('click',function(e){
+        e.stopPropagation();
         var title=$('#title'),
             content=$('#content');
 
@@ -116,6 +117,7 @@
 
     //更改登录密码
     $('#btnPass').on('click',function(e){
+        e.stopPropagation();
         var opass=$('#oldPass'),
             npass=$('#newPass'),
             cpass=$('#comPass');
@@ -165,7 +167,8 @@
         });
     });
 
-    $('#btnEmail').on('click',function(){
+    $('#btnEmail').on('click',function(e){
+        e.stopPropagation();
         var mail=$('#email');
 
         if(!$.trim(mail.val())){
@@ -201,6 +204,7 @@
 
     //更改登录邮箱
     $('#btnSave').on('click',function(e){
+        e.stopPropagation();
         var code=$('#code'),
             nmail=$('#newMail'),
             cmail=$('#comMail');

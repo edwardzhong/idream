@@ -97,7 +97,8 @@ $('#intro').on(changeEvent, function(e) {
     setTextWarn.call(this,this.innerHTML,150);
 });
 
-$('#btn').on('click', function() {
+$('#btn').on('click', function(e) {
+    e.stopPropagation();
     showDialog({txt:'确定保存吗？',confirm:'确认'},function(){
         var avatar=$('#avatar').find('img').attr('src'),
             name=$('#name').html(),
@@ -105,7 +106,7 @@ $('#btn').on('click', function() {
             sex=$('[name=gender]:checked').data('id')||0,
             age=$('#age').val(),
             job=$('#job').val(),
-            location=$('#loc').val();
+            loc=$('#loc').val();
         $('#loading').show();
         sendFn({
             r:'/user/edit-user',
@@ -113,7 +114,7 @@ $('#btn').on('click', function() {
             uname:name,
             intro:intro,
             sex:sex,
-            location:location,
+            location:loc,
             job:job,
             age:age
         },function(ret){
