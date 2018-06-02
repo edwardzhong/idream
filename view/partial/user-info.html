@@ -1,6 +1,6 @@
 <div class="user-info">
     {% if isSelf %}
-    <a class="edit" href="/edit_user" title="编辑我的信息"><i class="icon-edit-alt"></i></a>
+    <a class="edit" href="/profile" title="编辑我的信息"><i class="icon-edit-alt"></i></a>
     {% endif %}
     {% if isOther and isLogin %}
     <a id="black" class="delete" href="javascript:;" title="加入黑名单">
@@ -8,7 +8,7 @@
     </a>
     {% endif %}    
     <div class="avatar">
-        <img src="{{user.avatar}}" alt="avatar">
+        <img src="{{user.avatar||'/img/avatar.jpg'}}" alt="avatar">
     </div>
     <h2 class="name">{{user.uname}}</h2>
     <p class="desc">{{user.intro}}</p>

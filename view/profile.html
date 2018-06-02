@@ -1,0 +1,56 @@
+{% extends './layout/layout-user.html' %}
+{% block title %}编辑信息-iDream{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="./lib/cropper/cropper.min.css">
+<style> .content .left{border-right: none; } </style>
+{% endblock %}
+{% block js %}
+<script src="./lib/cropper/cropper.min.js"></script>
+<script src="/js/profile.js"></script>
+{% endblock %}
+{% block left %}{% endblock %}
+{% block middle %}
+<div class="edit-user">
+    <div id="avatar" class="avatar">
+        <img src="{{user.avatar||'/img/avatar.jpg'}}" alt="avatar">
+    </div>
+    <div id="name" class="edit-div name" contenteditable="true" onpaste="return false" oncontextmenu="return false">{{ruser.uname}}</div>
+    <p class="label">我对梦的看法</p>
+    <div class="edit-div desc" id="intro" contenteditable="true" onpaste="return false" oncontextmenu="return false">{{ruser.intro}}</div>
+    <div class="info">
+        <p title="性别" class="clearfix">
+            <div class="gender-label">
+                <i class="icon-venus-mars"></i>
+                <span>性别</span>
+            </div>
+            <div class="gender-wrap">
+            <input type="radio" name="gender" id="g1" data-id="1" class="radio small" {%if ruser.sex==1%}checked{%endif%}><label for="g1"><i class="icon-mars"></i>男</label>
+            <input type="radio" name="gender" id="g2" data-id="2" class="radio small" {%if ruser.sex==2%}checked{%endif%}><label for="g2"><i class="icon-venus"></i>女</label>
+            <input type="radio" name="gender" id="g3" data-id="3" class="radio small" {%if ruser.sex==3%}checked{%endif%}><label for="g3"><i class="icon-mars-double"></i>男男</label>
+            <input type="radio" name="gender" id="g4" data-id="4" class="radio small" {%if ruser.sex==4%}checked{%endif%}><label for="g4"><i class="icon-venus-double"></i>女女</label>
+            <input type="radio" name="gender" id="g5" data-id="5" class="radio small" {%if ruser.sex==5%}checked{%endif%}><label for="g5"><i class="icon-venus-mars"></i>异性</label><br>
+            <input type="radio" name="gender" id="g6" data-id="6" class="radio small" {%if ruser.sex==6%}checked{%endif%}><label for="g6"><i class="icon-transgender"></i>双性</label>
+            <input type="radio" name="gender" id="g7" data-id="7" class="radio small" {%if ruser.sex==7%}checked{%endif%}><label for="g7"><i class="icon-neuter"></i>无性</label>
+            </div>
+        </p>
+        <p title="还剩下多少生命">
+            <i class="icon-hourglass"></i>
+            <span>剩下生命</span>
+            <input id="year" type="text" value="{{ruser.age}}" maxlength="2">
+        </p>
+        <p title="职业">
+            <i class="icon-briefcase"></i>
+            <span>职业</span>
+            <input id="job" type="text" value="{{ruser.job}}" maxlength="50">
+        </p>
+        <p title="地域">
+            <i class="icon-location"></i>
+            <span>地域</span>
+            <input id="loc" type="text" value="{{ruser.location}}" maxlength="50">
+        </p>
+    </div>
+    <a id="btn" class="save border-btn primary-btn" href="javascript:;">保存</a>
+</div>
+{% endblock %}
+{% block right %}
+{% endblock %}

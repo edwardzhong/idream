@@ -1,0 +1,119 @@
+{% extends './layout/layout-user.html' %}
+{% block title %}设置-iDream{% endblock %}
+{% block js %}
+<script src="/js/setup.js"></script>
+{% endblock %}
+{% block left %}
+{% include './partial/user-info.html' %}
+{% endblock %}
+{% block middle %}
+<div class="setup">
+    <ul class="nav clearfix">
+        <li data-tag="about"><a href="#about">关于</a></li>
+        <li data-tag="notice"><a href="#notice">通知</a></li>
+        <li data-tag="private"><a href="#private">隐私</a></li>
+        <li data-tag="account"><a href="#account">账户</a></li>
+        <li data-tag="black"><a href="#black">黑名单</a></li>
+    </ul>
+    <div class="pages">
+        <div class="about">
+            <h3>你的建议</h3>
+            <input id="title" class="text" type="text" placeholder="关于" maxlength="100"><br>
+            <div class="edit-div" id="content" contenteditable="true" placeholder="具体内容" onpaste="return false" oncontextmenu="return false"></div>
+            <button id="btnAbout" class="border-btn primary-btn">提交</button>
+        </div>
+        <div class="notice">
+            <div class="box-wrap">
+                <label for="comment">评论</label>
+                <input type="checkbox" name="notice" id="comment" class="checkbox" {%if ruser.notice.is_review ==1 %}checked{%endif%}>
+            </div>
+            <div class="box-wrap">
+                <label for="ding">被点赞</label>
+                <input type="checkbox" name="notice" id="ding" class="checkbox" {%if ruser.notice.is_digg ==1 %}checked{%endif%}>
+            </div>
+        </div>
+        <div class="private">
+            <div class="box-wrap">
+                <input type="radio" name="private" id="pub" data-show="1" class="radio" {%if ruser.is_show ==1 %}checked{%endif%}><label for="pub">公开: 我的主页和梦境</label>
+            </div>
+            <div class="box-wrap">
+                <input type="radio" name="private" id="pri" data-show="2" class="radio" {%if ruser.is_show ==2 %}checked{%endif%}><label for="pri">私密: 其他人看不到我的主页和梦境</label>
+            </div>
+        </div>
+        <div class="account">
+            <h3>更改登录密码</h3>
+            <form class="form">
+                <div class="control-group">
+                    <input id="oldPass" type="password" placeholder="原密码" maxlength="100">
+                </div>
+                <div class="control-group">
+                    <input id="newPass" type="password" placeholder="新密码" maxlength="100">
+                </div>
+                <div class="control-group">
+                    <input id="comPass" type="password" placeholder="新密码确认" maxlength="100">
+                </div>
+                <div class="control-group clearfix">
+                    <button id="btnPass" class="border-btn primary-btn">保存</button>
+                </div>
+            </form>
+
+            <h3>更改登录邮箱</h3>
+            <form class="form">
+                <div class="control-group">
+                    <input id="email" type="text" placeholder="原邮箱:发送验证码" maxlength="100"><br>
+                </div>
+                <div class="control-group clearfix">
+                    <button id="btnEmail" class="border-btn">发送</button>
+                </div>
+            </form>
+            <form class="form">
+                <div class="control-group">
+                    <input id="code" type="text" placeholder="验证码" maxlength="100">
+                </div>
+                <div class="control-group">
+                    <input id="newMail" type="text" placeholder="新邮箱" maxlength="100">
+                </div>
+                <div class="control-group">
+                    <input id="comMail" type="text" placeholder="新邮箱确认" maxlength="100">
+                </div>
+                <div class="control-group clearfix">
+                    <button id="btnSave" class="border-btn primary-btn">保存</button>
+                </div>
+            </form>
+        </div>
+        <div class="black">
+            {% if !ruser.black_list or !ruser.black_list.length %}
+            <h3>没有黑名单</h3>
+            {% else %}
+            <h3>已存在黑名单</h3>
+            <ul class="black-list">
+                {% for b in ruser.black_list %}
+                <li>
+                    <a href="/user/{{b.uid}}" class="avatar-wrap">
+                        <div class="avatar">
+                            <img src="{{b.avatar||'/img/avatar.jpg'}}" alt="avatar">
+                        </div>            
+                    </a>
+                    <div class="dream-wrap">
+                        <div class="title">
+                            <a href="/user/{{b.uid}}""><h4>{{b.uname}}</h4></a>
+                            <a class="icon" data-tag="black" data-id="{{b.uid}}" href="javascript:;">
+                                <i class="icon-minus-circled"></i>
+<!--                                 <div class="delete-black">
+                                    <h5>取消黑名单</h5>
+                                    <span data-tag="confirm" data-id="{{b.uid}}">确认</span>
+                                </div> -->
+                            </a>
+                        </div>
+                        <p>{{b.intro}}</p>
+                    </div>
+                </li>
+                {%endfor%}
+            </ul>
+            {%endif%}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block right %}
+{% endblock %}

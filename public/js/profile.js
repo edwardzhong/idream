@@ -4,13 +4,19 @@ var img;
 function cutPicture() {
     var cropData = $(img).cropper('getData'),
         canvas = document.createElement('canvas'),
-        ctx = canvas.getContext('2d');
+        ctx = canvas.getContext('2d'),
+        cSrc='';
 
     canvas.width = cropData.width;
     canvas.height = cropData.height;
     ctx.drawImage(img, cropData.x, cropData.y, cropData.width, cropData.height, 0, 0, canvas.width, canvas.height);
-    $('#avatar').find('img').attr('src', canvas.toDataURL('image/jpeg'));
+    cSrc=canvas.toDataURL('image/jpeg');
+    $('#avatar').find('img').attr('src', cSrc);
+    reqUploadImg(cSrc, function(src) {
+        $('#avatar').find('img').attr('src', src);
+    });
 }
+
 // 重置状态
 function destroyImg() {
     $(img).cropper('destroy');
@@ -80,40 +86,46 @@ $('#year').on(changeEvent, function(e) {
     $(this).val(val);
 });
 
-$('#pro,#loc').on(changeEvent, function(e) {
-    var val = this.value,
-        num = 0;
-    for (var i = 0; i < val.length; i++) {
-        if (/[\u4e00-\u9fa5]/.test(val.charAt(i))) {
-            num++;
-        }
-    }
-    if (num > 7) {
-        $(this).addClass('warn')
-    } else {
-        $(this).removeClass('warn');
-    }
+
+$('#name').on(changeEvent, function(e) {
+    setTextWarn.call(this,this.innerHTML,7);
+});
+$('#job,#loc').on(changeEvent, function(e) {
+    setTextWarn.call(this,this.value,7);
+});
+$('#intro').on(changeEvent, function(e) {
+    setTextWarn.call(this,this.innerHTML,150);
 });
 
-$('#desc').on(changeEvent, function(e) {
-    var val = $(this).html(),
-        num = 0;
-    for (var i = 0; i < val.length; i++) {
-        if (/[\u4e00-\u9fa5]/.test(val.charAt(i))) {
-            num++;
-        }
-    }
-    if (num > 150) {
-        $(this).addClass('warn')
-    } else {
-        $(this).removeClass('warn');
-    }
-});
-
-$('#save').on('click', function() {
+$('#btn').on('click', function() {
     showDialog({txt:'确定保存吗？',confirm:'确认'},function(){
-        // todo: 提交个人信息,成功后跳转主页
-        location.href='index.html';
+        var avatar=$('#avatar').find('img').attr('src'),
+            name=$('#name').html(),
+            intro=$('#intro').html(),
+            sex=$('[name=gender]:checked').data('id')||0,
+            age=$('#age').val(),
+            job=$('#job').val(),
+            location=$('#loc').val();
+        $('#loading').show();
+        sendFn({
+            r:'/user/edit-user',
+            avatar:avatar,
+            uname:name,
+            intro:intro,
+            sex:sex,
+            location:location,
+            job:job,
+            age:age
+        },function(ret){
+            $('#loading').hide();
+            if(ret.code == 200){
+                location.href='/';
+                // console.log(ret);
+            } else {
+                showDialog({txt:ret.msg,confirm:'确认'});  
+            }
+        });
+        
     });
 });
 

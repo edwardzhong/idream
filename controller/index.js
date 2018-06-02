@@ -54,6 +54,8 @@ async function resIndex(ctx, next, name) {
         Object.assign(data, globleConfig);
         ctx.body = await ctx.render(name ? name : 'index', data);
     } catch (err) {
+        log.error(userForm);
+        log.error(listForm);
         log.error(err.message.substr(0, 500));
         ctx.status = 500;
         ctx.statusText = 'Internal Server Error';
@@ -84,11 +86,8 @@ async function resUser(ctx, next, name) {
         self = {},
         user = {},
         list = [],
-        count = 0,
-        data = {
-            isLogin: false,
-            isNew: false
-        };
+        total = 0,
+        data = { isLogin: false, isNew: false };
 
     if (name) { listForm.has_img = 2; }
     try {
@@ -116,7 +115,7 @@ async function resUser(ctx, next, name) {
         Object.assign(user, userRet.data);
         if (listRet.data && listRet.data.feed) {
             Object.assign(list, listRet.data.feed);
-            count = Number(listRet.data.count || 0);
+            total = Number(listRet.data.count || 0);
         }
         user = initUser(user);
         list = initList(list);
@@ -128,7 +127,7 @@ async function resUser(ctx, next, name) {
             user: user,
             list: list,
             count: list.length,
-            total: count
+            total: total
         }, globleConfig);
         ctx.body = await ctx.render(name ? name : 'user', data);
     } catch (err) {
@@ -154,11 +153,8 @@ exports.tag = async function(ctx, next) {
         user = {},
         self = {},
         list = [];
-    count = 0,
-        data = {
-            isLogin: false,
-            isNew: false
-        };
+        total = 0,
+        data = { isLogin: false, isNew: false };
 
     if (!uid || !tag) return;
     try {
@@ -189,7 +185,7 @@ exports.tag = async function(ctx, next) {
         Object.assign(user, userRet.data);
         if (listRet.data && listRet.data.feed) {
             Object.assign(list, listRet.data.feed);
-            count = Number(listRet.data.count || 0);
+            total = Number(listRet.data.count || 0);
         }
 
         user = initUser(user);
@@ -202,7 +198,7 @@ exports.tag = async function(ctx, next) {
             user: user,
             list: list,
             count: list.length,
-            total: count
+            total: total
         }, globleConfig);
 
         ctx.body = await ctx.render('tag', data);
@@ -319,25 +315,31 @@ exports.explore = async function(ctx, next) {
         selfForm = { r: '/user/get-user-info' },
         self = {},
         list = [],
-        count = 0,
+        total = 0,
         data = { isLogin: false, isExplore: true, isNew: false };
-
+    if (!ctx.session || !ctx.session.user) {
+        return ctx.redirect('/login');
+    }
+    data.isLogin = true;
+    form.token = ctx.session.user.token;
+    selfForm.token = ctx.session.user.token;
     try {
-        if (ctx.session && ctx.session.user) {
-            form.token = ctx.session.user.token;
-            selfForm.token = ctx.session.user.token;
-            let self = await request(selfForm);
-            self = JSON.parse(self);
-            if (self.code != 200) { log.warn(self); }
-            Object.assign(self, self.data);
-            data.isLogin = true;
-        }
-        let listRet = await request(form);
-        listRet = JSON.parse(listRet);
+        // let selfRet = await request(selfForm);
+        // selfRet = JSON.parse(selfRet);
+        // if (selfRet.code != 200) { log.warn(selfRet); }
+        // Object.assign(self, selfRet.data);
+
+        // let listRet = await request(form);
+        let ret = await Promise.all([request(selfForm), request(form)]),
+            selfRet = JSON.parse(ret[0]),
+            listRet = JSON.parse(ret[1]);
+
+        if (selfRet.code != 200) { log.warn(selfRet); }
+        Object.assign(self, selfRet.data);
         if (listRet.code != 200) { log.warn(listRet); }
         if (listRet.data && listRet.data.data) {
             Object.assign(list, listRet.data.data);
-            count = Number(listRet.data.count || 0);
+            total = Number(listRet.data.count || 0);
         }
 
         list = initList(list);
@@ -347,13 +349,13 @@ exports.explore = async function(ctx, next) {
             self: self,
             list: list,
             count: list.length,
-            total: count
+            total: total
         }, globleConfig);
 
         ctx.body = await ctx.render('explore', data);
     } catch (err) {
+        log.error(selfForm);
         log.error(form);
-        log.error(userForm);
         log.error(err.message.substr(0, 500));
         ctx.status = 500;
         ctx.statusText = 'Internal Server Error';
@@ -364,25 +366,47 @@ exports.explore = async function(ctx, next) {
 /**
  * notice
  */
-exports.notice=async function(ctx,next){
+exports.notice = async function(ctx, next) {
     if (!ctx.session || !ctx.session.user) {
         return ctx.redirect('/login');
     }
-    let selfForm = { r: '/user/get-user-info',token: ctx.session.user.token},
-        listForm = { r:'/user/get-user-msg',page_size:config.pageSize,token:ctx.session.user.token},
-        self={},
-        list=[];
+    let selfForm = { r: '/user/get-user-info', token: ctx.session.user.token },
+        listForm = { r: '/user/get-user-msg', page_size: config.pageSize, token: ctx.session.user.token },
+        self = {},
+        total=0,
+        list = [];
+    try {
+        let ret=await Promise.all([request(selfForm),request(listForm)]),
+            selfRet=JSON.parse(ret[0]),
+            listRet=JSON.parse(ret[1]);
+        if(selfRet.code!=200){log.warn(selfRet);}
+        if(listRet.code!=200){log.warn(listRet);}
+        Object.assign(self,selfRet.data);
+        if (listRet.data && listRet.data.data) {
+            Object.assign(list, listRet.data.data);
+            total = Number(listRet.data.count || 0);
+        }
+        list = initList(list);
+        self = initUser(self);
+
         let data = {
-            isSelf: true,
+            isNotice:true,
             isLogin: true,
-            isNew: user.unread_count ? true : false,
-            user: user,
-            self: user,
+            // isNew: self.unread_count ? true : false,
+            isNew: false,
+            self: self,
             list: list,
             count: list.length,
-            total: Number(listRet.data.count)
+            total: total
         };
         Object.assign(data, globleConfig);
+        ctx.body = await ctx.render('notice', data);
+    } catch (err) {
+        log.error(selfForm);
+        log.error(listForm);
+        log.error(err.message.substr(0, 500));
+        ctx.status = 500;
+        ctx.statusText = 'Internal Server Error';
+        ctx.res.end(err.message);
+    }
 };
-
-

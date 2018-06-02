@@ -467,3 +467,17 @@ function initList(list) {
     });
 }
 
+function setTextWarn(val,l){
+    var num = 0;
+    for (var i = 0; i < val.length; i++) {
+        if (/[\u4e00-\u9fa5]/.test(val.charAt(i))) {
+            num++;
+        }
+        if (num > l) {
+            $(this).addClass('warn');
+            return;
+        }
+    }
+    $(this).removeClass('warn');
+}
+

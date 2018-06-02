@@ -1,6 +1,7 @@
 const { proxy } = require('./config/app');
 const proxyFn = require('./controller/proxy');
 const indexCtr = require('./controller/index');
+const setupCtr = require('./controller/setup');
 const signCtr = require('./controller/sign');
 const pages = ['about', 'login', 'register', 'forget', 'tool','forbit'];
 
@@ -15,7 +16,10 @@ module.exports = function(router) {
         .get('/picture', indexCtr.mypicture)
         .get('/tag/:uid/:tag', indexCtr.tag)
         .get('/explore', indexCtr.explore)
-        // .get('/notice', indexCtr.notice)
+        .get('/notice', indexCtr.notice)
+        .get('/profile', setupCtr.profile)
+        .get('/setup', setupCtr.setup)
+        // .get('/search', setupCtr.search)
         .post('/login', signCtr.login)
         .post('/register', signCtr.register)
         .post('/logout', signCtr.logout);

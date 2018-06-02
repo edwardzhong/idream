@@ -604,8 +604,10 @@ input[type=text],input[type=password]{
     word-wrap: break-word;
     overflow-x: hidden;
     overflow-y: auto;
-    // -webkit-user-select: auto;
-    // -webkit-user-modify: read-write-plaintext-only;
+    &.warn{
+      border-color: @warn !important;
+      color: @warn !important;
+    }
 }
 
 .avatar{
@@ -1564,9 +1566,6 @@ input[type=file]{
     margin: 20px auto;
     border: none;
     border-bottom: 1px solid @border-gray;
-    &.warn{
-      color: @warn;
-    }
   }
   .desc{
     width: 500px;
@@ -1574,9 +1573,6 @@ input[type=file]{
     text-align: left;
     border-color: @border-gray;
     border-width: 0 0 1px 0;
-    &.warn{
-      color: @warn;
-    }
   }
   .info{
     display: inline-block;
@@ -1694,6 +1690,17 @@ input[type=radio].radio.small{
     p{
       margin-top: 100px;
       color: @blue;
+    }
+    input,.edit-div{
+      text-align: left;
+      width: 400px;
+      margin-top: 40px;
+    }
+    .edit-wrap span{
+      left: 47px;
+    }
+    button{
+      margin-top: 40px;
     }
   }
   .notice{

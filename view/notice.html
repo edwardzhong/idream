@@ -1,75 +1,33 @@
 {% extends './layout/layout-user.html' %}
 {% block title %}探索-iDream{% endblock %}
 {% block css %}
-<style>
-    .content .left{
-        border-right: none;
-    }
-</style>
+<style> .content .left{border-right: none; } </style>
 {% endblock %}
 {% block js %}
-<script src="/js/explore.js"></script>
+<script src="/js/notice.js"></script>
 {% endblock %}
 {% block left %}{% endblock %}
 {% block middle %}
 {% if !list.length %}
-<div class="no-list">没有文章</div>
+<div class="no-list">没有消息</div>
 {% else %}
-<ul class="article-list">
-    {% for li in list %}
-    <li>
-        <a href="/user/{{li.uid}}" class="avatar-wrap">
+<ul class="article-list notice">
+    {% for m in list %}
+    <li {% if m.is_open == 0 %}class="new"{%endif%}>
+        <a href="/user/{{m.feed_uid}}" class="avatar-wrap">
             <div class="avatar">
-                <img src="{{li.avatar}}" alt="avatar">
-            </div>            
+                <img src="{{m.from_avatar||'/img/avatar.jpg'}}" alt="avatar">
+            </div>
         </a>
         <div class="dream-wrap">
             <div class="title">
-                <a href="/article/{{li.feed_id}}"><time class="fr">{{li.publish_time}}</time></a>
-                <a href="/article/{{li.feed_id}}"><h3>{{li.title}}</h3></a>
-                <a href="/user/{{li.uid}}"><span>{{li.uname}}</span></a>
+                <a href="/article/{{m.feed_id}}"><time class="fr">{{m.add_time}}</time></a>
+                <a href="/user/{{m.feed_uid}}"><span>{{m.from_uname}}</span><a>| {% if m.type==1 %}评论文章{%endif%}{% if m.type ==2 %}点赞文章{%endif%}{% if m.type ==3 %}回复评论{%endif%}
+                <a href="/article/{{m.feed_id}}"><span>{{m.title}}</span></a>
             </div>
-            <div class="img-list">
-                {% for img in li.imgInfo %}
-                <div class="img"><img src="{{img}}" alt=""></div>
-                {% endfor %}
-            </div>
-            <p>{{li.content}}</p>
-            <div class="actions">
-                {% if li.is_me == 1 %}
-                <i class="icon-eye-off private" title="私密" style="display:{% if li.show_type ==2%}inline{%else%}none{%endif%};"></i>
-                {% endif %}
-                <i data-tag="up" data-id="{{li.feed_id}}" class="icon-heart {% if li.has_digg == 1%}active{% endif %}" title="比心"></i>
-                <span>{{li.digg_count}}</span>
-                <i data-tag="comment" data-id="{{li.feed_id}}" class="icon-comment" title="评论"></i>
-                <span id="com{{feed_id}}">{{li.comment_count}}</span>
-                <i data-tag="share" class="icon-forward" title="传达"></i>
-                {% if li.is_me == 1 %}
-                <i data-tag="more" class="icon-ellipsis" title="更多"></i>
-                {% endif %}
-                <div class="down-tip" data-menu="share">
-                    <div class="menu">
-                        <a data-tag="copy" href="javascript:;" data-clipboard-text="/article/{{li.feed_id}}">复制链接</a>
-                        <a class="share-icon" href="javascript:;" data-url="/article/{{li.feed_id}}">
-                            <i data-tag="facebook" class="icon-facebook-squared"></i>
-                            <i data-tag="weibo" class="icon-sina-weibo"></i>
-                            <i data-tag="douban">豆</i>
-                            <i data-tag="qq" class="icon-qq"></i>
-                            <i data-tag="wechat" class="icon-wechat"></i>
-                            <i data-tag="whatsapp" class="icon-whatsapp"></i>
-                        </a>
-                    </div>
-                </div>
-                {% if li.is_me == 1 %}
-                <div class="down-tip" data-menu="more">
-                    <div class="menu">
-                        <a href="/edit/{{li.feed_id}}">编辑</a>
-                        <a data-tag="delete" data-id="{{li.feed_id}}" href="javascript:;">删除</a>
-                        <a data-tag="private" data-id="{{li.feed_id}}" data-type="{{li.show_type}}" href="javascript:;">设为{% if li.show_type ==2%}公开{%else%}私密{%endif%}</a>
-                    </div>
-                </div>
-                {% endif %}
-            </div>
+            {% if m.review_content %}
+            <a href="/article/{{m.feed_id}}"><p>{{m.review_content}}</p></a>
+            {% endif %}
         </div>
     </li>
     {% endfor %}
@@ -78,49 +36,19 @@
 {% endblock %}
 {% block right %}
 <script id="liTemp" type="text/html">
-<li>
-    <a href="/user/(uid)" class="avatar-wrap">
+<li class="(new)">
+    <a href="/user/(feed_uid)" class="avatar-wrap">
         <div class="avatar">
-            <img src="(avatar)" alt="avatar">
-        </div>            
+            <img src="(from_avatar)" alt="avatar">
+        </div>
     </a>
     <div class="dream-wrap">
         <div class="title">
-            <a href="/article/(feed_id)"><time class="fr">(publish_time)</time></a>
-            <a href="/article/(feed_id)"><h3>(title)</h3></a>
-            <a href="/user/(uid)"></a><span>(uname)</span>
+            <a href="/article/(feed_id)"><time class="fr">(add_time)</time></a>
+            <a href="/user/(feed_uid)"><span>(from_uname)</span><a>| (type)
+            <a href="/article/(feed_id)"><span>(title)</span></a>
         </div>
-        <div class="img-list">(imgs)</div>
-        <p>(content)</p>
-        <div class="actions">
-            <i class="icon-eye-off private" title="私密" style="display:(pstyle);"></i>
-            <i data-tag="up" data-id="(feed_id)" class="icon-heart (has_digg)" title="比心"></i>
-            <span>(digg_count)</span>
-            <i data-tag="comment" data-id="(feed_id)" class="icon-comment" title="评论"></i>
-            <span id="com(feed_id)">(comment_count)</span>
-            <i data-tag="share" class="icon-forward" title="传达"></i>
-            <i data-tag="more" class="icon-ellipsis" style="display:(mstyle);" title="更多"></i>
-            <div class="down-tip" data-menu="share">
-                <div class="menu">
-                    <a data-tag="copy" href="javascript:;" data-clipboard-text="/article/(feed_id)">复制链接</a>
-                    <a class="share-icon" href="javascript:;" data-url="/article/(feed_id)">
-                        <i data-tag="facebook" class="icon-facebook-squared"></i>
-                        <i data-tag="weibo" class="icon-sina-weibo"></i>
-                        <i data-tag="douban">豆</i>
-                        <i data-tag="qq" class="icon-qq"></i>
-                        <i data-tag="wechat" class="icon-wechat"></i>
-                        <i data-tag="whatsapp" class="icon-whatsapp"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="down-tip" data-menu="more">
-                <div class="menu">
-                    <a href="/edit/(feed_id)">编辑</a>
-                    <a data-tag="delete" data-id="(feed_id)" href="javascript:;">删除</a>
-                    <a data-tag="private" data-id="(feed_id)" data-type="(show_type)" href="javascript:;">设为(ptxt)</a>
-                </div>
-            </div>
-        </div>
+        (content)
     </div>
 </li>
 </script>
