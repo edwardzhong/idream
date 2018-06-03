@@ -281,6 +281,7 @@ exports.article = async function(ctx, next) {
         form = { r: '/feed/feed-info', feed_id: id },
         self = {},
         user = {},
+        comments = [],
         data = { isLogin: false };
 
     if (!id) return;
@@ -313,12 +314,14 @@ exports.article = async function(ctx, next) {
             }
         }
         if (!self.uid) { Object.assign(self, user); }
+        Object.assign(comments,ret.data.review);
+        comments.forEach(i=>{i.reply=initList(i.reply);});
         Object.assign(data, {
             isNew: self.unread_count ? true : false,
             self: self,
             user: user,
             article: initList([ret.data.info])[0],
-            comments: ret.data.review
+            comments: initList(comments)
         }, globleConfig);
 
         ctx.body = await ctx.render('article', data);
