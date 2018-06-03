@@ -406,10 +406,7 @@ function scrollPage(opt) {
                         var feeds = ret.data.feed, lis = [], li = '';
                         feeds = initList(feeds);
                         feeds.forEach(function(item, i) {
-                            item.content = item.content.replace(/(^|\>|\s+)\#([^\<\>\s\n]+)/g,function(a,b,c){
-                                var mstr=c.replace('&nbsp;','').replace(/^\s+|\s+$/,'');
-                                return b+'<a href="/topic/'+mstr+'" class="topic">#'+mstr+'</a>';
-                            });
+                            item.content = replaceTopic(item.content);
                             li = tpl.replace(/\(avatar\)/, item.avatar)
                                 .replace(/\(publish_time\)/, item.publish_time)
                                 .replace(/\(feed_id\)/g, item.feed_id)
@@ -462,6 +459,15 @@ function setContent(){
         $(this).removeClass('show');
     });
 }
+
+function replaceTopic(content,kw){
+    return content.replace(/(^|\>|\s+)\#([^\<\>\s\n]+)/g,function(a,b,c){
+        var mstr=c.replace('&nbsp;','').replace(/^\s+|\s+$/,''),
+        act=(kw && kw==mstr)?true:false;
+        return b+'<a href="'+(act?'javascript:;':'/topic/'+mstr)+'" class="topic'+(act?' active':'')+'">#'+mstr+'</a>';
+    });
+}
+
 function initList(list) {
     return list.map(function(i) {
         i.avatar = i.avatar || '/img/avatar.jpg';

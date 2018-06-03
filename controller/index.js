@@ -393,7 +393,7 @@ exports.topic=async function(ctx,next){
         self = {},
         list = [],
         total = 0,
-        data = { isLogin: false, isNew: false };
+        data = { isLogin: false, isNew: false, isSearch:true };
     if (!ctx.session || !ctx.session.user) {
         return ctx.redirect('/login');
     }

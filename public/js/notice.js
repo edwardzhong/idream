@@ -31,10 +31,7 @@ function scrollPage(opt) {
                         var feeds = ret.data.data, lis = [], li = '';
                         feeds.forEach(function(item, i) {
                             if(item.review_content){
-                                item.review_content = item.review_content.replace(/(^|\>|\s+)\#([^\<\>\s\n]+)/g,function(a,b,c){
-                                    var mstr=c.replace('&nbsp;','').replace(/^\s+|\s+$/,'');
-                                    return b+'<a href="/topic/'+mstr+'" class="topic">#'+mstr+'</a>';
-                                });
+                                item.review_content = replaceTopic(item.review_content);
                             }
                             li = tpl.replace(/\(from_avatar\)/, item.from_avatar||'/img/avatar.jpg')
                                 .replace(/\(feed_uid\)/g, item.feed_uid)

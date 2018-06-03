@@ -3,6 +3,25 @@ var FeedID=0;
 
 //简单事件绑定
 function bindEvents() {
+    $('#search').find('input').on(changeEvent,function(e){
+        var search=$('#search'),
+            val=$(this).val(),
+            tip=search.find('.tip');
+        tip.find('p').html(val);
+        if(!val){
+            tip.hide();
+        } else {
+            tip.show();
+        }
+    });
+
+    $(document).on('keydown',function(e){
+        var txt=$.trim($('#search').find('input').val());
+        if(e.keyCode==13&&txt){
+            //todo:向后台查询结果
+            $('#search').find('.tip').hide();
+        }
+    });
     $('.article-list li').on('click', 'p', function() {
         $(this).addClass('show');
     });
@@ -198,11 +217,7 @@ function scrollPage(opt) {
                         var feeds = ret.data.data, lis = [], li = '';
                         feeds = initList(feeds);
                         feeds.forEach(function(item, i) {
-                            item.content = item.content.replace(/(^|\>|\s+)\#([^\<\>\s\n]+)/g,function(a,b,c){
-                                var mstr=c.replace('&nbsp;','').replace(/^\s+|\s+$/,''),
-                                    act=(kw && kw==mstr)?true:false;
-                                return b+'<a href="'+(act?'javascript:;':'/topic/'+mstr)+'" class="topic'+(act?' active':'')+'">#'+mstr+'</a>';
-                            });
+                            item.content = replaceTopic(item.content,Topic.substr(1));
                             li = tpl.replace(/\(avatar\)/, item.avatar)
                                 .replace(/\(uid\)/g, item.uid)
                                 .replace(/\(publish_time\)/, item.publish_time)
