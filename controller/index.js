@@ -304,11 +304,11 @@ exports.article = async function(ctx, next) {
             self = initUser(self);
             data.isOther = true;
         }
-        if(ret.data.is_show==2){
+        if(user.is_show==2){
             return ctx.redirect('/private');
         }
-        if(ret.data.black_list){
-            if(ret.data.black_list.some(i=>{return self.uid && i.uid == self.uid})){
+        if(user.black_list){
+            if(user.black_list.some(i=>{return self.uid && i.uid == self.uid})){
                 return ctx.redirect('/black');
             }
         }
@@ -348,12 +348,6 @@ exports.explore = async function(ctx, next) {
     form.token = ctx.session.user.token;
     selfForm.token = ctx.session.user.token;
     try {
-        // let selfRet = await request(selfForm);
-        // selfRet = JSON.parse(selfRet);
-        // if (selfRet.code != 200) { log.warn(selfRet); }
-        // Object.assign(self, selfRet.data);
-
-        // let listRet = await request(form);
         let ret = await Promise.all([request(selfForm), request(form)]),
             selfRet = JSON.parse(ret[0]),
             listRet = JSON.parse(ret[1]);

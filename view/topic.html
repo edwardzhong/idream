@@ -12,42 +12,69 @@
     <h2 class="topic-title">#那只说明你还不够了解它</h2>
 </div>
 <div class="search-pos"></div>
+{% if !list.length %}
+<div class="no-list">没用该主题的文章</div>
+{% else %}
 <ul class="article-list">
+    {% for li in list %}
     <li>
-        <a href="other.html" class="avatar-wrap">
+        <a href="/user/{{li.uid}}" class="avatar-wrap">
             <div class="avatar">
-                <img src="./img/avatar.jpg" alt="">
+                <img src="{{li.avatar}}" alt="avatar">
             </div>            
         </a>
         <div class="dream-wrap">
-            <a href="other_article.html">
             <div class="title">
-                <a href="other_article.html"><time class="fr">15:00 4-24</time></a>
-                <a href="other_article.html"><h3>梦境题目title</h3></a>
-                <a href="other.html"><span>作者名字</span></a>
+                <a href="/article/{{li.feed_id}}"><time class="fr">{{li.publish_time}}</time></a>
+                <a href="/article/{{li.feed_id}}"><h3>{{li.title}}</h3></a>
+                <a href="/user/{{li.uid}}"><span>{{li.uname}}</span></a>
             </div>
-            </a>
-            <p>如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦<a href="other.html">@other</a>如果无法简洁的表达你的想法,<a href="#">#那只说明你还不够了解它</a>.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦</p>
-            {% include './partial/actions.html' with {type:3} %}
+            <div class="img-list">
+                {% for img in li.imgInfo %}
+                <div class="img"><img src="{{img}}" alt=""></div>
+                {% endfor %}
+            </div>
+            <p>{{li.content}}</p>
+            <div class="actions">
+                {% if li.is_me == 1 %}
+                <i class="icon-eye-off private" title="私密" style="display:{% if li.show_type ==2%}inline{%else%}none{%endif%};"></i>
+                {% endif %}
+                <i data-tag="up" data-id="{{li.feed_id}}" class="icon-heart {% if li.has_digg == 1%}active{% endif %}" title="比心"></i>
+                <span>{{li.digg_count}}</span>
+                <i data-tag="comment" data-id="{{li.feed_id}}" class="icon-comment" title="评论"></i>
+                <span id="com{{feed_id}}">{{li.comment_count}}</span>
+                <i data-tag="share" class="icon-forward" title="传达"></i>
+                {% if li.is_me == 1 %}
+                <i data-tag="more" class="icon-ellipsis" title="更多"></i>
+                {% endif %}
+                <div class="down-tip" data-menu="share">
+                    <div class="menu">
+                        <a data-tag="copy" href="javascript:;" data-clipboard-text="/article/{{li.feed_id}}">复制链接</a>
+                        <a class="share-icon" href="javascript:;" data-url="/article/{{li.feed_id}}">
+                            <i data-tag="facebook" class="icon-facebook-squared"></i>
+                            <i data-tag="weibo" class="icon-sina-weibo"></i>
+                            <i data-tag="douban">豆</i>
+                            <i data-tag="qq" class="icon-qq"></i>
+                            <i data-tag="wechat" class="icon-wechat"></i>
+                            <i data-tag="whatsapp" class="icon-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                {% if li.is_me == 1 %}
+                <div class="down-tip" data-menu="more">
+                    <div class="menu">
+                        <a href="/edit/{{li.feed_id}}">编辑</a>
+                        <a data-tag="delete" data-id="{{li.feed_id}}" href="javascript:;">删除</a>
+                        <a data-tag="private" data-id="{{li.feed_id}}" data-type="{{li.show_type}}" href="javascript:;">设为{% if li.show_type ==2%}公开{%else%}私密{%endif%}</a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
         </div>
     </li>
-    <li>
-        <a href="index.html" class="avatar-wrap">
-            <div class="avatar">
-                <img src="./img/avatar.jpg" alt="">
-            </div>
-        </a>
-        <div class="dream-wrap">
-            <div class="title">
-                <a href="article.html"><time class="fr">15:00 4-24</time></a>
-                <a href="article.html"><h3>梦境题目title</h3></a>
-                <a href="index.html"><span>我的名字</span></a>
-            </div>
-            <p>如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦<a href="other.html">@other</a>如果无法简洁的表达你的想法,<a href="#">#那只说明你还不够了解它</a>.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦如果无法简洁的表达你的想法,那只说明你还不够了解它.阿尔伯特.爱因斯坦</p>
-            {% include './partial/actions.html' with {type:1} %}
-        </div>
-    </li>
+    {% endfor %}
 </ul>
+{% endif %}
 {% endblock %}
 {% block right %}
 <script id="liTemp" type="text/html">
