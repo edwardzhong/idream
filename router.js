@@ -16,6 +16,7 @@ module.exports = function(router) {
         .get('/picture', indexCtr.mypicture)
         .get('/tag/:uid/:tag', indexCtr.tag)
         .get('/explore', indexCtr.explore)
+        .get('/topic/:kw', indexCtr.topic)
         .get('/notice', indexCtr.notice)
         .get('/profile', setupCtr.profile)
         .get('/setup', setupCtr.setup)

@@ -406,6 +406,9 @@ function scrollPage(opt) {
                         var feeds = ret.data.feed, lis = [], li = '';
                         feeds = initList(feeds);
                         feeds.forEach(function(item, i) {
+                            item.content = item.content.replace(/(^|\>|\s+)\#([^\<\>\s\n]+)/g,function(a,b,c){
+                                return b+'<a href="/topic/'+c+'" class="topic">#'+c.replace(/^\s+|\s+$/,'')+'</a>';
+                            });
                             li = tpl.replace(/\(avatar\)/, item.avatar)
                                 .replace(/\(publish_time\)/, item.publish_time)
                                 .replace(/\(feed_id\)/g, item.feed_id)

@@ -30,6 +30,11 @@ function scrollPage(opt) {
                         pageNo++;
                         var feeds = ret.data.data, lis = [], li = '';
                         feeds.forEach(function(item, i) {
+                            if(item.review_content){
+                                item.review_content = item.review_content.replace(/(^|\>|\s+)\#([^\<\>\s\n]+)/g,function(a,b,c){
+                                    return b+'<a href="/topic/'+c+'" class="topic">#'+c.replace(/^\s+|\s+$/,'')+'</a>';
+                                });
+                            }
                             li = tpl.replace(/\(from_avatar\)/, item.from_avatar||'/img/avatar.jpg')
                                 .replace(/\(feed_uid\)/g, item.feed_uid)
                                 .replace(/\(feed_id\)/g, item.feed_id)

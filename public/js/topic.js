@@ -199,7 +199,9 @@ function scrollPage(opt) {
                         feeds = initList(feeds);
                         feeds.forEach(function(item, i) {
                             item.content = item.content.replace(/(^|\>|\s+)\#([^\<\>\s\n]+)/g,function(a,b,c){
-                                return b+'<a href="/topic/'+c+'" class="topic">#'+c.replace(/^\s+|\s+$/,'')+'</a>';
+                                var mstr=c.replace(/^\s+|\s+$/,''),
+                                act=(kw && kw==mstr)?true:false;
+                                return b+'<a href="'+(act?'javascript:;':'/topic/'+c)+'" class="topic'+(act?' active':'')+'">#'+mstr+'</a>';
                             });
                             li = tpl.replace(/\(avatar\)/, item.avatar)
                                 .replace(/\(uid\)/g, item.uid)
@@ -252,5 +254,5 @@ function scrollPage(opt) {
 
 setCopyUrl();
 bindEvents();
-scrollPage({r:'/feed/explore'});
+scrollPage({r:'/feed/explore',keyword:Topic.substr(1)});
 

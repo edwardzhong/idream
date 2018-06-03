@@ -317,7 +317,7 @@ exports.article = async function(ctx, next) {
             isNew: self.unread_count ? true : false,
             self: self,
             user: user,
-            article: ret.data.info,
+            article: initList([ret.data.info])[0],
             comments: ret.data.review
         }, globleConfig);
 
@@ -371,6 +371,60 @@ exports.explore = async function(ctx, next) {
         }, globleConfig);
 
         ctx.body = await ctx.render('explore', data);
+    } catch (err) {
+        log.error(selfForm);
+        log.error(form);
+        log.error(err.message.substr(0, 500));
+        ctx.status = 500;
+        ctx.statusText = 'Internal Server Error';
+        ctx.res.end(err.message);
+    }
+};
+
+/**
+ * topic
+ */
+exports.topic=async function(ctx,next){
+    let keyword=ctx.params.kw
+    if(!keyword){return; }
+    keyword = '#'+keyword;
+    let form = { r: '/feed/explore', keyword:keyword,page_size: config.pageSize },
+        selfForm = { r: '/user/get-user-info' },
+        self = {},
+        list = [],
+        total = 0,
+        data = { isLogin: false, isNew: false };
+    if (!ctx.session || !ctx.session.user) {
+        return ctx.redirect('/login');
+    }
+    data.isLogin = true;
+    form.token = ctx.session.user.token;
+    selfForm.token = ctx.session.user.token;
+    try {
+        let ret = await Promise.all([request(selfForm), request(form)]),
+            selfRet = JSON.parse(ret[0]),
+            listRet = JSON.parse(ret[1]);
+
+        if (selfRet.code != 200) { log.warn(selfRet); }
+        Object.assign(self, selfRet.data);
+        if (listRet.code != 200) { log.warn(listRet); }
+        if (listRet.data && listRet.data.data) {
+            Object.assign(list, listRet.data.data);
+            total = Number(listRet.data.count || 0);
+        }
+
+        list = initList(list,keyword.substr(1));
+        self = initUser(self);
+        Object.assign(data, {
+            topic:keyword,
+            isNew: self.unread_count ? true : false,
+            self: self,
+            list: list,
+            count: list.length,
+            total: total
+        }, globleConfig);
+
+        ctx.body = await ctx.render('topic', data);
     } catch (err) {
         log.error(selfForm);
         log.error(form);

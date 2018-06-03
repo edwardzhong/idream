@@ -4,16 +4,17 @@
 <style>.content .left { border-right: none; } </style>
 {% endblock %}
 {% block js %}
-<script src="/js/search.js"></script>
+<script>var Topic='{{topic}}';</script>
+<script src="/js/topic.js"></script>
 {% endblock %}
 {% block left %}{% endblock %}
 {% block middle %}
 <div id="serachNav" class="search-nav">
-    <h2 class="topic-title">#那只说明你还不够了解它</h2>
+    <h2 class="topic-title">{{topic}}</h2>
 </div>
 <div class="search-pos"></div>
 {% if !list.length %}
-<div class="no-list">没用该主题的文章</div>
+<div class="no-list">没有该主题的文章</div>
 {% else %}
 <ul class="article-list">
     {% for li in list %}
