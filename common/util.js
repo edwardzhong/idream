@@ -89,14 +89,16 @@ function initList(list,kw){
         i.host=config.url;
         if(i.content){
             i.content = i.content.replace(/(^|\>|\s+)\#([^\<\>\s\n]+)/g,(a,b,c)=>{
-                let mstr=c.replace(/^\s+|\s+$/,''),
+                let mstr=c.replace('&nbsp;','').replace(/^\s+|\s+$/,''),
                     act=(kw && kw==mstr)?true:false;
-                return b+'<a href="'+(act?'javascript:;':'/topic/'+c)+'" class="topic'+(act?' active':'')+'">#'+mstr+'</a>';
+                return b+'<a href="'+(act?'javascript:;':'/topic/'+mstr)+'" class="topic'+(act?' active':'')+'">#'+mstr+'</a>';
             });
         }
         if(i.review_content){
             i.review_content = i.review_content.replace(/(^|\>|\s+)\#([^\<\>\s\n]+)/g,(a,b,c)=>{
-                return b+'<a href="/topic/'+c+'" class="topic">#'+c.replace(/^\s+|\s+$/,'')+'</a>';
+                let mstr=c.replace(/^\s+|\s+$/,''),
+                    act=(kw && kw==mstr)?true:false;
+                return b+'<a href="'+(act?'javascript:;':'/topic/'+mstr)+'" class="topic'+(act?' active':'')+'">#'+mstr+'</a>';
             });
         }
         return i;

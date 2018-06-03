@@ -199,7 +199,8 @@ function scrollPage(opt) {
                         feeds = initList(feeds);
                         feeds.forEach(function(item, i) {
                             item.content = item.content.replace(/(^|\>|\s+)\#([^\<\>\s\n]+)/g,function(a,b,c){
-                                return b+'<a href="/topic/'+c+'" class="topic">#'+c.replace(/^\s+|\s+$/,'')+'</a>';
+                                var mstr=c.replace('&nbsp;','').replace(/^\s+|\s+$/,'');
+                                return b+'<a href="/topic/'+mstr+'" class="topic">#'+mstr+'</a>';
                             });
                             li = tpl.replace(/\(avatar\)/, item.avatar)
                                 .replace(/\(uid\)/g, item.uid)

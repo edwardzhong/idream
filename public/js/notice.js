@@ -32,7 +32,8 @@ function scrollPage(opt) {
                         feeds.forEach(function(item, i) {
                             if(item.review_content){
                                 item.review_content = item.review_content.replace(/(^|\>|\s+)\#([^\<\>\s\n]+)/g,function(a,b,c){
-                                    return b+'<a href="/topic/'+c+'" class="topic">#'+c.replace(/^\s+|\s+$/,'')+'</a>';
+                                    var mstr=c.replace('&nbsp;','').replace(/^\s+|\s+$/,'');
+                                    return b+'<a href="/topic/'+mstr+'" class="topic">#'+mstr+'</a>';
                                 });
                             }
                             li = tpl.replace(/\(from_avatar\)/, item.from_avatar||'/img/avatar.jpg')
