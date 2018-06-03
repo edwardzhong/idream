@@ -3,7 +3,7 @@ const proxyFn = require('./controller/proxy');
 const indexCtr = require('./controller/index');
 const setupCtr = require('./controller/setup');
 const signCtr = require('./controller/sign');
-const pages = ['about', 'login', 'register', 'forget', 'tool','forbit'];
+const pages = ['about', 'login', 'register', 'forget', 'tool'];
 
 module.exports = function(router) {
     router.post(proxy.filter, proxyFn)
@@ -19,6 +19,8 @@ module.exports = function(router) {
         .get('/notice', indexCtr.notice)
         .get('/profile', setupCtr.profile)
         .get('/setup', setupCtr.setup)
+        .get('/private', setupCtr.private)
+        .get('/black', setupCtr.black)
         // .get('/search', setupCtr.search)
         .post('/login', signCtr.login)
         .post('/register', signCtr.register)

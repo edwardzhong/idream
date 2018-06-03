@@ -110,6 +110,14 @@ async function resUser(ctx, next, name) {
             userRet = JSON.parse(ret[0]),
             listRet = JSON.parse(ret[1]);
 
+        if(userRet.data.is_show==2){
+            return ctx.redirect('/private');
+        }
+        if(userRet.data.black_list){
+            if(userRet.data.black_list.some(i=>{return self.uid && i.uid == self.uid})){
+                return ctx.redirect('/black');
+            }
+        }
         if (userRet.code != 200) { log.warn(userRet); }
         if (listRet.code != 200) { log.warn(listRet); }
         Object.assign(user, userRet.data);
@@ -117,6 +125,7 @@ async function resUser(ctx, next, name) {
             Object.assign(list, listRet.data.feed);
             total = Number(listRet.data.count || 0);
         }
+
         user = initUser(user);
         list = initList(list);
         if (!self.uid) { Object.assign(self, user); }
@@ -179,7 +188,14 @@ exports.tag = async function(ctx, next) {
         let ret = await Promise.all([request(userForm), request(listForm)]),
             userRet = JSON.parse(ret[0]),
             listRet = JSON.parse(ret[1]);
-
+        if(userRet.data.is_show==2){
+            return ctx.redirect('/private');
+        }
+        if(userRet.data.black_list){
+            if(userRet.data.black_list.some(i=>{return self.uid && i.uid == self.uid})){
+                return ctx.redirect('/black');
+            }
+        }
         if (userRet.code != 200) { log.warn(userRet); }
         if (listRet.code != 200) { log.warn(listRet); }
         Object.assign(user, userRet.data);
@@ -287,6 +303,14 @@ exports.article = async function(ctx, next) {
             Object.assign(self, selfRet.data);
             self = initUser(self);
             data.isOther = true;
+        }
+        if(ret.data.is_show==2){
+            return ctx.redirect('/private');
+        }
+        if(ret.data.black_list){
+            if(ret.data.black_list.some(i=>{return self.uid && i.uid == self.uid})){
+                return ctx.redirect('/black');
+            }
         }
         if (!self.uid) { Object.assign(self, user); }
         Object.assign(data, {

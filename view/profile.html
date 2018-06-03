@@ -2,13 +2,14 @@
 {% block title %}编辑信息-iDream{% endblock %}
 {% block css %}
 <link rel="stylesheet" href="./lib/cropper/cropper.min.css">
-<style> .content .left{border-right: none; } </style>
 {% endblock %}
 {% block js %}
 <script src="./lib/cropper/cropper.min.js"></script>
 <script src="/js/profile.js"></script>
 {% endblock %}
-{% block left %}{% endblock %}
+{% block left %}
+{% include './partial/user-info.html' %}
+{% endblock %}
 {% block middle %}
 <div class="edit-user">
     <div id="avatar" class="avatar">

@@ -58,3 +58,53 @@ async function resProfile(ctx,next,name){
     }
 
 }
+
+/**
+ * private
+ */
+exports.private=async function(ctx,next){
+    return resForbit(ctx,next);
+}
+
+/**
+ * forbit
+ */
+exports.black=async function(ctx,next){
+    return resForbit(ctx,next,true);
+};
+
+async function resForbit(ctx,next,isBlack){
+    if (!ctx.session || !ctx.session.user) {
+        return ctx.redirect('/login');
+    }
+    let selfForm = { r: '/user/get-user-info', token: ctx.session.user.token },
+        self = {};
+    try {
+        let ret=await request(selfForm),
+            selfRet=JSON.parse(ret);
+        if(selfRet.code!=200){log.warn(selfRet);}
+        Object.assign(self,selfRet.data);
+
+        self = initUser(self);
+
+        let data = {
+            isLogin: true,
+            isBlack:!!isBlack,
+            isNew: self.unread_count ? true : false,
+            self: self,
+            user: self,
+            count: 0,
+            total: 0
+        };
+        Object.assign(data, globleConfig);
+        ctx.body = await ctx.render('forbit', data);
+    } catch (err) {
+        log.error(selfForm);
+        log.error(err.message.substr(0, 500));
+        ctx.status = 500;
+        ctx.statusText = 'Internal Server Error';
+        ctx.res.end(err.message);
+    }
+};
+
+
