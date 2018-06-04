@@ -11,11 +11,11 @@
         options = { page_size: PageSize, keyword: Keyword },
         Actions = {
             dream: function() {
-                $.extend(options, { r: '/feed/explore' });
+                $.extend(options, { r: '/feed/explore' , has_img: '' });
                 afterLoad('dream');
             },
             user: function() {
-                $.extend(options, { r: '/feed/users-search', uname: Keyword });
+                $.extend(options, { r: '/feed/users-search', uname: Keyword , has_img: '' });
                 afterLoad('user');
             },
             picture: function() {
@@ -23,7 +23,7 @@
                 afterLoad('picture');
             },
             my: function() {
-                $.extend(options, { r: '/user/get-user-home' });
+                $.extend(options, { r: '/user/get-user-home', has_img: '' });
                 afterLoad('my');            }
         };
 
