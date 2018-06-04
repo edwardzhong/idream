@@ -58,9 +58,8 @@ exports.logout = async function(ctx, next) {
     try {
         let ret = await request(form);
         ret = JSON.parse(ret);
-        if (ret.code == 200) {
-            ctx.session.user = null;
-        }
+        if (ret.code != 200) {log.warn(form); }
+        ctx.session.user = null;
         ctx.body = await ret;
     } catch (err) {
         log.error(err);
