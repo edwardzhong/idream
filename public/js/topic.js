@@ -217,7 +217,7 @@ function scrollPage(opt) {
                         var feeds = ret.data.data, lis = [], li = '';
                         feeds = initList(feeds);
                         feeds.forEach(function(item, i) {
-                            item.content = replaceTopic(item.content,Topic.substr(1));
+                            item.content = replaceTopic(item.content,Topic);
                             li = tpl.replace(/\(avatar\)/, item.avatar)
                                 .replace(/\(uid\)/g, item.uid)
                                 .replace(/\(publish_time\)/, item.publish_time)
