@@ -12,36 +12,19 @@
         Actions = {
             dream: function() {
                 $.extend(options, { r: '/feed/explore' });
-                if (pageInfo.dream.firstLoad) {
-                    options.page = 1;
-                    renderList(scrollPage);
-                }
-                pageInfo.dream.firstLoad = false;
+                afterLoad('dream');
             },
             user: function() {
                 $.extend(options, { r: '/feed/users-search', uname: Keyword });
-                if (pageInfo.user.firstLoad) {
-                    options.page = 1;
-                    renderList(scrollPage);
-                }
-                pageInfo.user.firstLoad = false;
+                afterLoad('user');
             },
             picture: function() {
                 $.extend(options, { r: '/feed/explore', has_img: 2 });
-                if (pageInfo.picture.firstLoad) {
-                    options.page = 1;
-                    renderList(scrollPage);
-                }
-                pageInfo.picture.firstLoad = false;
+                afterLoad('picture');
             },
             my: function() {
                 $.extend(options, { r: '/user/get-user-home' });
-                if (pageInfo.my.firstLoad) {
-                    options.page = 1;
-                    renderList(scrollPage);
-                }
-                pageInfo.my.firstLoad = false;
-            }
+                afterLoad('my');            }
         };
 
     function selectHash(hash) {
@@ -59,6 +42,17 @@
             Actions[actionName].apply(this, args);
             firstLoad = false;
         }
+    }
+
+    function afterLoad(name){
+        if (pageInfo[name].firstLoad) {
+            options.page = 1;
+            renderList(scrollPage);
+        } else {
+            scrollPage();
+        }
+        pageInfo[name].firstLoad = false;
+
     }
 
     function activePage(name) {
@@ -98,6 +92,7 @@
             noList = list.prev('.no-list'),
             tpl = $(pageID == 'user' ? '#userTemp' : '#liTemp').html();
         console.log(options);
+        noList.hide();
         sendFn(options, function(ret) {
             console.log(ret);
             isLoading = false;
