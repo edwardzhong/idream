@@ -17,12 +17,12 @@ module.exports = function(router) {
         .get('/tag/:uid/:tag', indexCtr.tag)
         .get('/explore', indexCtr.explore)
         .get('/topic/:kw', indexCtr.topic)
+        // .get('/search', indexCtr.search)
         .get('/notice', indexCtr.notice)
         .get('/profile', setupCtr.profile)
         .get('/setup', setupCtr.setup)
         .get('/private', setupCtr.private)
         .get('/black', setupCtr.black)
-        // .get('/search', setupCtr.search)
         .post('/login', signCtr.login)
         .post('/register', signCtr.register)
         .post('/logout', signCtr.logout);

@@ -18,8 +18,8 @@ function bindEvents() {
     $(document).on('keydown',function(e){
         var txt=$.trim($('#search').find('input').val());
         if(e.keyCode==13&&txt){
-            //todo:向后台查询结果
             $('#search').find('.tip').hide();
+            location.href='/search?kw='+txt;
         }
     });
     $('.article-list li').on('click', 'p', function() {
@@ -269,5 +269,5 @@ function scrollPage(opt) {
 
 setCopyUrl();
 bindEvents();
-scrollPage({r:'/feed/explore',keyword:Topic.substr(1)});
+scrollPage({r:'/feed/explore',keyword:Topic});
 

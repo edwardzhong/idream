@@ -110,11 +110,12 @@ async function resUser(ctx, next, name) {
             userRet = JSON.parse(ret[0]),
             listRet = JSON.parse(ret[1]);
 
-        if(userRet.data.is_show==2){
+        if (userRet.data.is_show == 2) {
             return ctx.redirect('/private');
         }
-        if(userRet.data.black_list){
-            if(userRet.data.black_list.some(i=>{return self.uid && i.uid == self.uid})){
+        if (userRet.data.black_list) {
+            if (userRet.data.black_list.some(i => {
+                    return self.uid && i.uid == self.uid })) {
                 return ctx.redirect('/black');
             }
         }
@@ -162,7 +163,7 @@ exports.tag = async function(ctx, next) {
         user = {},
         self = {},
         list = [];
-        total = 0,
+    total = 0,
         data = { isLogin: false, isNew: false };
 
     if (!uid || !tag) return;
@@ -188,12 +189,15 @@ exports.tag = async function(ctx, next) {
         let ret = await Promise.all([request(userForm), request(listForm)]),
             userRet = JSON.parse(ret[0]),
             listRet = JSON.parse(ret[1]);
-        if(userRet.data.is_show==2){
-            return ctx.redirect('/private');
-        }
-        if(userRet.data.black_list){
-            if(userRet.data.black_list.some(i=>{return self.uid && i.uid == self.uid})){
-                return ctx.redirect('/black');
+        if(data.isOther){
+            if (userRet.data.is_show == 2) {
+                return ctx.redirect('/private');
+            }
+            if (userRet.data.black_list) {
+                if (userRet.data.black_list.some(i => {
+                    return self.uid && i.uid == self.uid })) {
+                    return ctx.redirect('/black');
+                }
             }
         }
         if (userRet.code != 200) { log.warn(userRet); }
@@ -305,17 +309,20 @@ exports.article = async function(ctx, next) {
             self = initUser(self);
             data.isOther = true;
         }
-        if(user.is_show==2){
-            return ctx.redirect('/private');
-        }
-        if(user.black_list){
-            if(user.black_list.some(i=>{return self.uid && i.uid == self.uid})){
-                return ctx.redirect('/black');
+        if(data.isOther){
+            if (user.is_show == 2) {
+                return ctx.redirect('/private');
             }
+            if (user.black_list) {
+                if (user.black_list.some(i => {
+                        return self.uid && i.uid == self.uid })) {
+                    return ctx.redirect('/black');
+                }
+            }  
         }
         if (!self.uid) { Object.assign(self, user); }
-        Object.assign(comments,ret.data.review);
-        comments.forEach(i=>{i.reply=initList(i.reply);});
+        Object.assign(comments, ret.data.review);
+        comments.forEach(i => { i.reply = initList(i.reply); });
         Object.assign(data, {
             isNew: self.unread_count ? true : false,
             self: self,
@@ -387,16 +394,17 @@ exports.explore = async function(ctx, next) {
 /**
  * topic
  */
-exports.topic=async function(ctx,next){
-    let keyword=ctx.params.kw
-    if(!keyword){return; }
-    keyword = '#'+keyword;
-    let form = { r: '/feed/explore', keyword:keyword,page_size: config.pageSize },
+exports.topic = async function(ctx, next) {
+    let keyword = ctx.params.kw
+    if (!keyword) {
+        return; }
+    keyword = '#' + keyword;
+    let form = { r: '/feed/explore', keyword: keyword, page_size: config.pageSize },
         selfForm = { r: '/user/get-user-info' },
         self = {},
         list = [],
         total = 0,
-        data = { isLogin: false, isNew: false, isSearch:true };
+        data = { isNew: false, isSearch: true };
     if (!ctx.session || !ctx.session.user) {
         return ctx.redirect('/login');
     }
@@ -416,10 +424,10 @@ exports.topic=async function(ctx,next){
             total = Number(listRet.data.count || 0);
         }
 
-        list = initList(list,keyword.substr(1));
+        list = initList(list, keyword.substr(1));
         self = initUser(self);
         Object.assign(data, {
-            topic:keyword,
+            topic: keyword,
             isNew: self.unread_count ? true : false,
             self: self,
             list: list,
@@ -428,6 +436,38 @@ exports.topic=async function(ctx,next){
         }, globleConfig);
 
         ctx.body = await ctx.render('topic', data);
+    } catch (err) {
+        log.error(selfForm);
+        log.error(form);
+        log.error(err.message.substr(0, 500));
+        ctx.status = 500;
+        ctx.statusText = 'Internal Server Error';
+        ctx.res.end(err.message);
+    }
+};
+
+exports.search = async function(ctx, next) {
+    let kw = ctx.query.kw||'';
+    if (!ctx.session || !ctx.session.user) {
+        return ctx.redirect('/login');
+    }
+    let self = {},
+        data = { isLogin: true, isNew: false, isSearch: true };
+    try {
+        let ret = await request({ r: '/user/get-user-info', token: ctx.session.user.token });
+        ret = JSON.parse(ret);
+        if (ret.code != 200) { log.warn(ret); }
+        Object.assign(self, ret.data);
+        self = initUser(self);
+        Object.assign(data, {
+            keyword: kw,
+            isNew: self.unread_count ? true : false,
+            self: self,
+            count: 0,
+            total: 0
+        }, globleConfig);
+
+        ctx.body = await ctx.render('search', data);
     } catch (err) {
         log.error(selfForm);
         log.error(form);
@@ -448,15 +488,15 @@ exports.notice = async function(ctx, next) {
     let selfForm = { r: '/user/get-user-info', token: ctx.session.user.token },
         listForm = { r: '/user/get-user-msg', page_size: config.pageSize, token: ctx.session.user.token },
         self = {},
-        total=0,
+        total = 0,
         list = [];
     try {
-        let ret=await Promise.all([request(selfForm),request(listForm)]),
-            selfRet=JSON.parse(ret[0]),
-            listRet=JSON.parse(ret[1]);
-        if(selfRet.code!=200){log.warn(selfRet);}
-        if(listRet.code!=200){log.warn(listRet);}
-        Object.assign(self,selfRet.data);
+        let ret = await Promise.all([request(selfForm), request(listForm)]),
+            selfRet = JSON.parse(ret[0]),
+            listRet = JSON.parse(ret[1]);
+        if (selfRet.code != 200) { log.warn(selfRet); }
+        if (listRet.code != 200) { log.warn(listRet); }
+        Object.assign(self, selfRet.data);
         if (listRet.data && listRet.data.data) {
             Object.assign(list, listRet.data.data);
             total = Number(listRet.data.count || 0);
@@ -465,7 +505,7 @@ exports.notice = async function(ctx, next) {
         self = initUser(self);
 
         let data = {
-            isNotice:true,
+            isNotice: true,
             isLogin: true,
             // isNew: self.unread_count ? true : false,
             isNew: false,
