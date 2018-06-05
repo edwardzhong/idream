@@ -1,7 +1,7 @@
 {% extends './layout/layout-user.html' %}
 {% block title %}{% if isSelf %}我{% else %}{{user.uname}}{% endif %}的标签-iDream{% endblock %}
 {% block js %}
-<script src="/js/tag.js"></script>
+<script src="/js/tag.min.js"></script>
 {% endblock %}
 {% block left %}
 {% include './partial/user-info.html' with {isTag:true} %}

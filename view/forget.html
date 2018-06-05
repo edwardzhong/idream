@@ -2,51 +2,7 @@
 {% block title %}忘记密码-iDream{% endblock %}
 {% block js %}
 <script>
-	var email=$('#email');
-	$('#btn').on('click',function(e){
-		if(!$.trim(email.val())){
-			email.addClass('warn');
-			showDialog({txt:'邮箱不能为空',confirm:'确认'},function(){
-				email.focus();
-			});
-			return;
-		}
-
-		if(!/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(email.val())){
-            email.addClass('warn');
-            showDialog({txt:'邮箱格式不正确',confirm:'确认'},function(){
-				email.focus();
-			});
-            return;
-        }
-
-        email.removeClass('warn');
-	    $.ajax({
-			url:'/api',
-			type:'POST',
-			dataType:'json',
-			data:{
-				r:'/login/forget',
-				email:email.val()
-			},
-			success:function(data){
-				if(data.code==200){
-					location.href='/';
-				} else {
-					showDialog({txt:data.msg||'服务器错误,请稍后再试',confirm:'确认'},function(){
-						email.focus();
-					});
-				}
-				console.log(data);
-			},
-			error:function(err){
-				showDialog({txt:'服务器错误,请稍后再试',confirm:'确认'},function(){
-					email.focus();
-				});
-				console.log(err);
-			}
-		});
-	});
+ var email=$('#email'); $('#btn').on('click',function(e){ if(!$.trim(email.val())){ email.addClass('warn'); showDialog({txt:'邮箱不能为空',confirm:'确认'},function(){ email.focus(); }); return; } if(!/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(email.val())){ email.addClass('warn'); showDialog({txt:'邮箱格式不正确',confirm:'确认'},function(){ email.focus(); }); return; } email.removeClass('warn'); $.ajax({ url:'/api', type:'POST', dataType:'json', data:{ r:'/login/forget', email:email.val() }, success:function(data){ if(data.code==200){ location.href='/'; } else { showDialog({txt:data.msg||'服务器错误,请稍后再试',confirm:'确认'},function(){ email.focus(); }); } }, error:function(err){ showDialog({txt:'服务器错误,请稍后再试',confirm:'确认'},function(){ email.focus(); }); } }); });
 </script>
 {% endblock %}
 {% block content %}

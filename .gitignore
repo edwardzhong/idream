@@ -4,6 +4,7 @@ public/upload
 public/dist
 public/less
 public/rev
+public/sourcejs
 logs
 gulpfile.js
 *.log

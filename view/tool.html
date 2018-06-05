@@ -2,86 +2,21 @@
 {% block title %}接口测试-iDream{% endblock %}
 {% block css%}
 <style>
-	.block{
-		width: 600px;
-		margin: 20px auto;
-		text-align: center;
-	}
-	h3{
-		text-align: left;
-	}
-	textarea{
-		width: 100%;
-	}
-	a{
-		line-height: 2;
-		color: #666;
-	}
-	button{
-		padding: 4px 40px;
-		border: 1px solid  #179be6;
-		background-color: #179be6;
-		color: #fff;
-		border-radius: 6px;
-	}
+ .block{ width: 600px; margin: 20px auto; text-align: center; } h3{ text-align: left; } textarea{ width: 100%; } a{ line-height: 2; color: #666; } button{ padding: 4px 40px; border: 1px solid #179be6; background-color: #179be6; color: #fff; border-radius: 6px; }
 </style>
 {% endblock%}
 {% block js%}
 <script>
-	// $(document).on('keydown',function(e){
-	// 	if(e.keyCode==13){
-	// 		send();
-	// 	}
-	// });
-	$('#login').attr('href','/login?rurl='+encodeURIComponent("/tool"));
-	$('#btn').on('click',send);
-	$('#logout').on('click',function(){
-		$.ajax({
-			url:'/logout',
-			type:'POST',
-			dataType:'json',
-			success:function(ret){
-				showRet(ret);
-			},
-			error:function(err){
-				$('#ret').val(err);
-			}
-		});
-	});
-	function send(){
-		var val=$.trim($('#txt').val());
-		val=val.replace(/\n/g,'","').replace(/\:/g,'":"');
-		var data='{"'+val+'"}';
-		console.log(data);
-		data=JSON.parse(data);
-		$.ajax({
-			url:'/api',
-			data:data,
-			type:'POST',
-			dataType:'json',
-			success:function(ret){
-				showRet(ret);
-			},
-			error:function(err){
-				$('#ret').val(err);
-			}
-		});
-	}
-
-	function showRet(ret){
-		var str=JSON.stringify(ret);
-		str=str.replace(/\,/g,',\n');
-		$('#ret').val(str);
-	}
+ $('#login').attr('href','/login?rurl='+encodeURIComponent("/tool")); $('#btn').on('click',send); $('#logout').on('click',function(){ $.ajax({ url:'/logout', type:'POST', dataType:'json', success:function(ret){ showRet(ret); }, error:function(err){ $('#ret').val(err); } }); }); function send(){ var val=$.trim($('#txt').val()); val=val.replace(/\n/g,'","').replace(/\:/g,'":"'); var data='{"'+val+'"}'; console.log(data); data=JSON.parse(data); $.ajax({ url:'/api', data:data, type:'POST', dataType:'json', success:function(ret){ showRet(ret); }, error:function(err){ $('#ret').val(err); } }); } function showRet(ret){ var str=JSON.stringify(ret); str=str.replace(/\,/g,',\n'); $('#ret').val(str); }
 </script>
 {% endblock %}
 {% block content %}
-	<div class="block">
-		<h3>参数</h3>
-		<textarea name="txt" id="txt" cols="50" rows="5"></textarea>
-		<h3>结果</h3>
-		<textarea name="ret" id="ret" cols="50" rows="15"></textarea>
-		<button id="btn">测试</button><br>
-		<a id="login" href="/login">登录</a> | <a id="logout" href="javascript:;">退出登录</a> |<a href="/">主页</a>	
-	</div>
+<div class="block">
+	<h3>参数</h3>
+	<textarea name="txt" id="txt" cols="50" rows="5"></textarea>
+	<h3>结果</h3>
+	<textarea name="ret" id="ret" cols="50" rows="15"></textarea>
+	<button id="btn">测试</button><br>
+	<a id="login" href="/login">登录</a> | <a id="logout" href="javascript:;">退出登录</a> |<a href="/">主页</a>	
+</div>
 {% endblock %}
