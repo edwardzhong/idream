@@ -398,13 +398,13 @@ exports.topic = async function(ctx, next) {
     let keyword = ctx.params.kw
     if (!keyword) {
         return; }
-    keyword = '#' + keyword;
-    let form = { r: '/feed/explore', keyword: keyword, page_size: config.pageSize },
+    // keyword = keyword;
+    let form = { r: '/user/get-topic-list', topic_name: keyword, page_size: config.pageSize },
         selfForm = { r: '/user/get-user-info' },
         self = {},
         list = [],
         total = 0,
-        data = { isNew: false, isSearch: true };
+        data = { isNew: false};
     if (!ctx.session || !ctx.session.user) {
         return ctx.redirect('/login');
     }
@@ -419,12 +419,12 @@ exports.topic = async function(ctx, next) {
         if (selfRet.code != 200) { log.warn(selfRet); }
         Object.assign(self, selfRet.data);
         if (listRet.code != 200) { log.warn(listRet); }
-        if (listRet.data && listRet.data.data) {
-            Object.assign(list, listRet.data.data);
+        if (listRet.data && listRet.data.feed) {
+            Object.assign(list, listRet.data.feed);
             total = Number(listRet.data.count || 0);
         }
 
-        list = initList(list, keyword.substr(1));
+        list = initList(list, keyword);
         self = initUser(self);
         Object.assign(data, {
             topic: keyword,
