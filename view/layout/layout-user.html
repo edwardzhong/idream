@@ -107,8 +107,8 @@ function setHeader() { var inner=document.querySelector('.header .inner'), winWi
 var Host='{{host}}', PageTotal={{total||0}}, PageSize={{pageSize||0}}, FirstCount={{count||0}}, Fmatch=location.pathname.match(/\/(article|edit)\/(\d+)/), Umatch=location.pathname.match(/\/(user|picture|tag)\/(\d+)/), FeedID=(Fmatch&&Fmatch[2])||0, UID=(Umatch&&Umatch[2])||0;
 </script>
 <script src="/lib/jquery.min.js"></script>
+<script src="/lib/qrcode.min.js"></script>
 <script>{% include '../../public/lib/clipboard.min.js' %}</script>
-<script>{% include '../../public/lib/qrcode.min.js' %}</script>
 <script>{% include '../../public/js/base.min.js' %}</script>
 {% block js %}{% endblock %}
 </body>

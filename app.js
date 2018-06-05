@@ -11,6 +11,11 @@ const favicon = require('koa-favicon');
 const addRouters = require('./router');
 const config = require('./config/app');
 const log = require('./common/logger');
+const staticCache = require('koa-static-cache')
+
+app.use(staticCache(__dirname + '/public/lib'), {
+  maxAge: 365 * 24 * 60 * 60
+});
 
 // diplay access records
 app.use(logger());
