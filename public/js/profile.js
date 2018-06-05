@@ -41,8 +41,8 @@ $(document.body).on('change', '#replaceUpload', function(e) {
         showDialog({txt:'只能上传jpg和png格式的图片',confirm:'确认'});
         return;
     }
-    if (fSize > 2 * 1024 * 1024) { //不能大于2M
-        showDialog({txt:'您上传的图片太大了，不能超过2M哦！',confirm:'确认'});
+    if (fSize > 300 * 1024) {
+        showDialog({txt:'您上传的图片太大了，不能超过300k哦！',confirm:'确认'});
         return;
     }
     if (window.FileReader) {
