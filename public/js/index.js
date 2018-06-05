@@ -1,29 +1,6 @@
 
-var FeedID=0;
-function Storage(name){
-    this.key=name;
-}
-Storage.prototype={
-    save:function(obj){
-        var str=JSON.stringify(obj);
-        localStorage.setItem(this.key,str);
-    },
-    get:function(){
-        var str=localStorage.getItem(this.key),
-            obj={};
-        try{
-            obj=JSON.parse(str);
-        }catch(err){
-            console.log(err);
-        }
-        return obj;
-    },
-    clear:function(){
-        localStorage.clear(this.key);
-    }
-};
-
-var storage=new Storage('addArticle');
+var FeedID=0,
+    storage=new Storage('addArticle');
 
 function restoreData(){
     var obj = storage.get();
@@ -37,23 +14,26 @@ function restoreData(){
 }
 
 function autoSave(){
-    var title=$.trim($('#title').val()),
-        content=$.trim($('#content').html()),
-        imgs=$('#editImgs').html(),
-        tags=$.trim($('#tag').val());
-    if(title&&content){
-        storage.save({
-            title:title,
-            content:content,
-            imgs:imgs,
-            tags:tags
-        });
+    function save(){
+        var title=$.trim($('#title').val()),
+            content=$.trim($('#content').html()),
+            imgs=$('#editImgs').html(),
+            tags=$.trim($('#tag').val());
+        if(title&&content){
+            storage.save({
+                title:title,
+                content:content,
+                imgs:imgs,
+                tags:tags
+            });
+        }
+        setTimeout(save, 50000);
     }
-    setTimeout(autoSave, 50000);
+    setTimeout(save, 50000);
 }
 
 restoreData();
-setTimeout(autoSave, 50000);
+autoSave();
 
 
 //简单事件绑定
@@ -165,9 +145,9 @@ function bindEvents() {
             tags:tags
         },function(ret){
             $('#loading').hide();
+            storage.clear();
             if(ret.code == 200){
                 location.reload();
-                storage.clear();
             } else {
                 showDialog({txt:ret.msg,confirm:'确认'});
             }

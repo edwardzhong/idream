@@ -3,7 +3,7 @@
         "name": "idream",
         "script": "app.js",
         "interpreter_args": "-harmony",
-        "watch": true,
+        "watch": false,
         "log_date_format": "YYYY - MM - DD HH: mm Z",
         "instances": "max",
         "exec_mode": "cluster",

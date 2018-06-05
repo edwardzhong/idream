@@ -491,3 +491,25 @@ function setTextWarn(val,l){
     $(this).removeClass('warn');
 }
 
+function Storage(name){
+    this.key=name;
+}
+Storage.prototype={
+    save:function(obj){
+        var str=JSON.stringify(obj);
+        localStorage.setItem(this.key,str);
+    },
+    get:function(){
+        var str=localStorage.getItem(this.key),
+            obj={};
+        try{
+            obj=JSON.parse(str);
+        }catch(err){
+            console.log(err);
+        }
+        return obj;
+    },
+    clear:function(){
+        localStorage.clear(this.key);
+    }
+};
