@@ -1,5 +1,60 @@
 
 var FeedID=0;
+function Storage(name){
+    this.key=name;
+}
+Storage.prototype={
+    save:function(obj){
+        var str=JSON.stringify(obj);
+        localStorage.setItem(this.key,str);
+    },
+    get:function(){
+        var str=localStorage.getItem(this.key),
+            obj={};
+        try{
+            obj=JSON.parse(str);
+        }catch(err){
+            console.log(err);
+        }
+        return obj;
+    },
+    clear:function(){
+        localStorage.clear(this.key);
+    }
+};
+
+var storage=new Storage('addArticle');
+
+function restoreData(){
+    var obj = storage.get();
+    if(obj&&obj.title){
+        $('#title').val(obj.title);
+        $('#content').html(obj.content);
+        $('#editImgs').html(obj.imgs);
+        $('#tag').val(obj.tags);
+        $('.edit-wrap').find('span').hide();
+    }
+}
+
+function autoSave(){
+    var title=$.trim($('#title').val()),
+        content=$.trim($('#content').html()),
+        imgs=$('#editImgs').html(),
+        tags=$.trim($('#tag').val());
+    if(title&&content){
+        storage.save({
+            title:title,
+            content:content,
+            imgs:imgs,
+            tags:tags
+        });
+    }
+    setTimeout(autoSave, 50000);
+}
+
+restoreData();
+setTimeout(autoSave, 50000);
+
 
 //简单事件绑定
 function bindEvents() {
@@ -112,7 +167,7 @@ function bindEvents() {
             $('#loading').hide();
             if(ret.code == 200){
                 location.reload();
-                console.log(ret);
+                storage.clear();
             } else {
                 showDialog({txt:ret.msg,confirm:'确认'});
             }
