@@ -106,7 +106,7 @@
 function setHeader() { var inner=document.querySelector('.header .inner'), winWidth=window.innerWidth||document.body.clientWidth; iWidth=inner.offsetWidth; w=(winWidth-iWidth)/2; inner.style.marginLeft=(w>0?w:0)+'px'; } function setSearch() { var search =document.getElementById('search'), title =document.getElementById('scrollPos'); if (search) { search.style.width=(title.offsetWidth / 2 - 45)+'px'; } } function setSearchNav() {var nav = document.getElementById('serachNav'), middle = document.getElementsByClassName('middle')[0], content = document.getElementsByClassName('content')[0], l = middle.offsetLeft + content.offsetLeft, w = middle.offsetWidth; if (nav) {nav.style.cssText = 'left:' + l + 'px;width:' + w + 'px'; } } function setTagWidth() { var act = document.getElementById('actions'); if (act) { act.getElementsByClassName('tags')[0].style.width=(act.offsetWidth-90)+'px'; } } window.onresize=function() { document.getElementById('blackMenu').style.display='none'; setHeader(); setSearch(); setSearchNav(); setTagWidth(); }; setHeader(); setSearch(); setSearchNav(); setTagWidth();
 var Host='{{host}}', PageTotal={{total||0}}, PageSize={{pageSize||0}}, FirstCount={{count||0}}, Fmatch=location.pathname.match(/\/(article|edit)\/(\d+)/), Umatch=location.pathname.match(/\/(user|picture|tag)\/(\d+)/), FeedID=(Fmatch&&Fmatch[2])||0, UID=(Umatch&&Umatch[2])||0;
 </script>
-<script>{% include '../../public/lib/jquery.min.js' %}</script>
+<script src="/lib/jquery.min.js"></script>
 <script>{% include '../../public/lib/clipboard.min.js' %}</script>
 <script>{% include '../../public/lib/qrcode.min.js' %}</script>
 <script>{% include '../../public/js/base.min.js' %}</script>
