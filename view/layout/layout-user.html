@@ -15,7 +15,7 @@
 			<a {% if isSelf %}class="active"{% endif %} href="/"><div class="avatar"><img src="{{self.avatar}}" alt="我的主页" title="我的主页"></div></a>
 			<a {% if isNotice %}class="active"{% endif %}{% if isNew %}class="new"{% endif %} href="/notice" title="通知"><i class="icon-bell"></i></a>
 			<a {% if isExplore %}class="active"{% endif %} href="/explore" title="探索"><i class="icon-globe"></i></a>
-			<a {% if isSearch %}class="active"{% endif %} href="/search" title="搜索"><i class="icon-search"></i></a>
+			<a {% if isSearch %}class="active" href="javascript:;" {% endif %} href="/search" title="搜索"><i class="icon-search"></i></a>
 			{% endif %}
 		</div>
 		<div class="set">

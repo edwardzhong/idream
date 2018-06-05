@@ -11,11 +11,11 @@
         options = { page_size: PageSize, keyword: Keyword },
         Actions = {
             dream: function() {
-                $.extend(options, { r: '/feed/explore' , has_img: '' });
+                $.extend(options, { r: '/feed/explore', has_img: '' });
                 afterLoad('dream');
             },
             user: function() {
-                $.extend(options, { r: '/feed/users-search', uname: Keyword , has_img: '' });
+                $.extend(options, { r: '/feed/users-search', uname: Keyword, has_img: '' });
                 afterLoad('user');
             },
             picture: function() {
@@ -24,7 +24,8 @@
             },
             my: function() {
                 $.extend(options, { r: '/user/get-user-home', has_img: '' });
-                afterLoad('my');            }
+                afterLoad('my');
+            }
         };
 
     function selectHash(hash) {
@@ -44,7 +45,7 @@
         }
     }
 
-    function afterLoad(name){
+    function afterLoad(name) {
         if (pageInfo[name].firstLoad) {
             options.page = 1;
             renderList(scrollPage);
@@ -116,7 +117,6 @@
                         if (item.content) {
                             item.content = replaceTopic(item.content);
                         }
-
                         li = tpl.replace(/\(avatar\)/, item.avatar)
                             .replace(/\(uid\)/g, item.uid)
                             .replace(/\(publish_time\)/, item.publish_time)
@@ -190,6 +190,7 @@
             if (e.keyCode == 13 && txt) {
                 $('#search').find('.tip').hide();
                 location.href = '/search?kw=' + txt + location.hash;
+                // location.href = '/search#' + pageID+'/'+txt;
             }
         });
         $('.article-list li').on('click', 'p', function() {
@@ -359,6 +360,5 @@
         $('#search').find('input').focus().val(Keyword);
     }, 300);
 
-    // scrollPage();
     setCopyUrl();
     bindEvents();
