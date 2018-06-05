@@ -19,10 +19,10 @@
         {% endif %}
     </div>
     <div class="info">
-        <p title="性别"><i class="icon-venus-mars"></i><span>{{user.sex}}</span></p>
-        <p title="剩下多少生命"><i class="icon-hourglass"></i><span>{{user.age}}</span></p>
-        <p title="职业"><i class="icon-briefcase"></i><span>{{user.job}}</span></p>
-        <p title="地域"><i class="icon-location"></i><span>{{user.location}}</span></p>
+        <p title="性别"><span class="label">性别 :</span><span>{{user.sex}}</span></p>
+        <p title="剩下多少生命"><span class="label">剩下生命 :</span><span>{{user.age}}</span></p>
+        <p title="职业"><span class="label">职业 :</span><span>{{user.job}}</span></p>
+        <p title="地域"><span class="label">地域 :</span><span>{{user.location}}</span></p>
     </div>
     <div class="tags">
         {% for tag in user.tags %}

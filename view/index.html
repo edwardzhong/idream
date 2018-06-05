@@ -20,6 +20,7 @@
         </a>
         <a id="addTag" href="javascript:;" title="自定义标签"><i class="icon-tag"></i></a>
         <input id="tag" class="tags" placeholder="自定义标签:每个梦境最多7个标签，每个标签最多7个中文" type="text">
+        <p class="add-desc">系统每50s自动保存一次,可用3张图片展示你的梦境内容,图片通过审核后呈上(感谢支持过滤不良图像)</p>
     </div>
 </div>
 {% if !list.length %}
@@ -47,11 +48,7 @@
             <p>{{li.content}}</p>
             <div class="actions">
                 <i class="icon-eye-off private" title="私密" style="display:{% if li.show_type ==2%}inline{%else%}none{%endif%};"></i>
-                <i data-tag="up" data-id="{{li.feed_id}}" class="icon-heart {% if li.has_digg == 1%}active{% endif %}" title="比心"></i>
-                <span>{{li.digg_count}}</span>
-                <i data-tag="comment" data-id="{{li.feed_id}}" class="icon-comment" title="评论"></i>
-                <span>{{li.comment_count}}</span>
-                <i data-tag="share" class="icon-forward" title="传达"></i>
+                <i data-tag="up" data-id="{{li.feed_id}}" class="icon-heart {% if li.has_digg == 1%}active{% endif %}" title="比心"></i><span>{{li.digg_count}}</span><i data-tag="comment" data-id="{{li.feed_id}}" class="icon-comment" title="评论"></i><span>{{li.comment_count}}</span><i data-tag="share" class="icon-forward" title="传达"></i>
                 <i data-tag="more" class="icon-ellipsis" title="更多"></i>
                 <div class="down-tip" data-menu="share">
                     <div class="menu">
@@ -98,11 +95,7 @@
         <p>(content)</p>
         <div class="actions">
             <i class="icon-eye-off private" title="私密" style="display:(pstyle);"></i>
-            <i data-tag="up" data-id="(feed_id)" class="icon-heart (has_digg)" title="比心"></i>
-            <span>(digg_count)</span>
-            <i data-tag="comment" data-id="(feed_id)" class="icon-comment" title="评论"></i>
-            <span>(comment_count)</span>
-            <i data-tag="share" class="icon-forward" title="传达"></i>
+            <i data-tag="up" data-id="(feed_id)" class="icon-heart (has_digg)" title="比心"></i><span>(digg_count)</span><i data-tag="comment" data-id="(feed_id)" class="icon-comment" title="评论"></i><span>(comment_count)</span><i data-tag="share" class="icon-forward" title="传达"></i>
             <i data-tag="more" class="icon-ellipsis" title="更多"></i>
             <div class="down-tip" data-menu="share">
                 <div class="menu">

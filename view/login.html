@@ -8,13 +8,15 @@
 {% block content %}
 <div class="sign-block">
 	<h2 class="title">Everything begin from your dreams</h2>
-	<form class="form">
+	<div class="form">
 		<input id="email" class="text" type="text" placeholder="账户" maxlength="30">
 		<input id="pass" class="text" type="password" placeholder="密码" maxlength="30">
 		<input id="btn" type="button" value="登入" class="login border-btn primary-btn"><br>
 		<a class="forget" href="/forget">忘记密码</a><br>
-		<a class="register" href="/register">创建账户</a>
-	</form>
-	<a class="about" href="/about">about iDream</a>
+	</div>
+	<div class="bottom-wrap">
+	<a class="bottom-btn" href="/register">创建账户</a>
+	<a class="about" href="/about">about iDream</a>		
+	</div>
 </div>
 {% endblock %}

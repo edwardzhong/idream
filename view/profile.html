@@ -21,8 +21,7 @@
     <div class="info">
         <p title="性别" class="clearfix">
             <div class="gender-label">
-                <i class="icon-venus-mars"></i>
-                <span>性别</span>
+                <span>性别 :</span>
             </div>
             <div class="gender-wrap">
             <input type="radio" name="gender" id="g1" data-id="1" class="radio small" {%if ruser.sex==1%}checked{%endif%}><label for="g1"><i class="icon-mars"></i>男</label>
@@ -35,18 +34,15 @@
             </div>
         </p>
         <p title="还剩下多少生命">
-            <i class="icon-hourglass"></i>
-            <span>剩下生命</span>
+            <span>剩下生命 :</span>
             <input id="age" type="text" value="{{ruser.age}}" maxlength="2">
         </p>
         <p title="职业">
-            <i class="icon-briefcase"></i>
-            <span>职业</span>
+            <span>职业 :</span>
             <input id="job" type="text" value="{{ruser.job}}" maxlength="50">
         </p>
         <p title="地域">
-            <i class="icon-location"></i>
-            <span>地域</span>
+            <span>地域 :</span>
             <input id="loc" type="text" value="{{ruser.location}}" maxlength="50">
         </p>
     </div>

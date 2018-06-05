@@ -22,11 +22,11 @@
         <div class="dream-wrap">
             <div class="title">
                 <a href="/article/{{m.feed_id}}"><time class="fr">{{m.add_time}}</time></a>
-                <a href="/user/{{m.feed_uid}}"><span>{{m.from_uname}}</span><a>| {% if m.type==1 %}评论文章{%endif%}{% if m.type ==2 %}点赞文章{%endif%}{% if m.type ==3 %}回复评论{%endif%}
+                <a href="/user/{{m.feed_uid}}"><span>{{m.from_uname}}</span><a> | {% if m.type==1 %}评论文章{%endif%}{% if m.type ==2 %}点赞文章{%endif%}{% if m.type ==3 %}回复评论{%endif%}
                 <a href="/article/{{m.feed_id}}"><span>{{m.title}}</span></a>
             </div>
             {% if m.review_content %}
-            <a href="/article/{{m.feed_id}}"><p>{{m.review_content}}</p></a>
+            <a class="content-link"href="/article/{{m.feed_id}}"><p>{{m.review_content}}</p></a>
             {% endif %}
         </div>
     </li>
@@ -45,7 +45,7 @@
     <div class="dream-wrap">
         <div class="title">
             <a href="/article/(feed_id)"><time class="fr">(add_time)</time></a>
-            <a href="/user/(feed_uid)"><span>(from_uname)</span><a>| (type)
+            <a href="/user/(feed_uid)"><span>(from_uname)</span><a> | (type)
             <a href="/article/(feed_id)"><span>(title)</span></a>
         </div>
         (content)

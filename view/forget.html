@@ -2,7 +2,8 @@
 {% block title %}忘记密码-iDream{% endblock %}
 {% block js %}
 <script>
- var email=$('#email'); $('#btn').on('click',function(e){ if(!$.trim(email.val())){ email.addClass('warn'); showDialog({txt:'邮箱不能为空',confirm:'确认'},function(){ email.focus(); }); return; } if(!/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(email.val())){ email.addClass('warn'); showDialog({txt:'邮箱格式不正确',confirm:'确认'},function(){ email.focus(); }); return; } email.removeClass('warn'); $.ajax({ url:'/api', type:'POST', dataType:'json', data:{ r:'/login/forget', email:email.val() }, success:function(data){ if(data.code==200){ location.href='/'; } else { showDialog({txt:data.msg||'服务器错误,请稍后再试',confirm:'确认'},function(){ email.focus(); }); } }, error:function(err){ showDialog({txt:'服务器错误,请稍后再试',confirm:'确认'},function(){ email.focus(); }); } }); });
+ var email=$('#email'); $('#btn').on('click',function(e){ if(!$.trim(email.val())){ email.addClass('warn'); showDialog({txt:'邮箱不能为空',confirm:'确认'},function(){ email.focus(); }); return; } if(!/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(email.val())){ email.addClass('warn'); showDialog({txt:'邮箱格式不正确',confirm:'确认'},function(){ email.focus(); }); return; } email.removeClass('warn'); $.ajax({ url:'/api', type:'POST', dataType:'json', data:{ r:'/login/forget', email:email.val() }, success:function(data){ if(data.code==200){ 
+ 	showDialog({txt:'重置已发送\n请登录邮箱查看',confirm:'确认'},function(){ location.href='/'; }); } else { showDialog({txt:data.msg||'服务器错误,请稍后再试',confirm:'确认'},function(){ email.focus(); }); } }, error:function(err){ showDialog({txt:'服务器错误,请稍后再试',confirm:'确认'},function(){ email.focus(); }); } }); });
 </script>
 {% endblock %}
 {% block content %}
@@ -12,7 +13,9 @@
 		<input id="email" class="text" type="text" placeholder="邮箱" maxlength="30">
 		<button id="btn" class="send border-btn primary-btn">重置密码</button>
 	</div>
-	<a class="backto" href="/login">返回登入</a>
-	<a class="about" href="/about">about iDream</a>
+	<div class="bottom-wrap">
+	<a class="bottom-btn" href="/login">返回登入</a>
+	<a class="about" href="/about">about iDream</a>		
+	</div>
 </div>
 {% endblock %}

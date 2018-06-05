@@ -23,10 +23,8 @@
         {% if isSelf %}
         <i class="icon-eye-off private" title="私密" style="display:{% if article.show_type ==2 %}inline{%else%}none{%endif%};"></i>
         {% endif%}
-        <i data-tag="up" data-id="{{article.feed_id}}" class="icon-heart {% if article.hasDigg == 1%}active{% endif %}" title="比心"></i>
-        <span>{% if article.digg_count == 0 %}{% else %}{{article.digg_count}}{% endif %}</span>
-        <i data-tag="comment" data-id="{{article.feed_id}}" class="icon-comment" title="评论"></i>
-        <span>{% if article.comment_count == 0 %}{% else %}{{article.comment_count}}{% endif %}</span>
+        <i data-tag="up" data-id="{{article.feed_id}}" class="icon-heart {% if article.hasDigg == 1%}active{% endif %}" title="比心"></i><span>{% if article.digg_count == 0 %}{% else %}{{article.digg_count}}{% endif %}</span>
+        <i data-tag="comment" data-id="{{article.feed_id}}" class="icon-comment" title="评论"></i><span>{% if article.comment_count == 0 %}{% else %}{{article.comment_count}}{% endif %}</span>
         <i data-tag="share" class="icon-forward" title="传达"></i>
         {% if isSelf %}
         <i data-tag="more" class="icon-ellipsis" title="更多"></i>
@@ -93,7 +91,7 @@
         		<div class="dream-wrap">
         			<div class="title">
         				<time class="fr">{{r.ctime}}</time>
-        				<a href="/user/{{r.uid}}"><span>{{r.uname}}</span></a><i class="icon-comment"></i><a href="/user/{{r.to_uid}}"><span>{{r.to_uname}}</span></a>
+        				<a href="/user/{{r.uid}}"><span>{{r.uname}}</span></a> | 回复 <a href="/user/{{r.to_uid}}"><span>{{r.to_uname}}</span></a>
         			</div>
         			<p>{{r.content}}</p>
                     <div class="actions">
