@@ -5,6 +5,7 @@
 {% include '../partial/meta.html' %}
 <link rel="stylesheet" href="/lib/fontello/fontello.css">
 <link rel="stylesheet" href="/css/index.css">
+<style>.cke_top,.cke_bottom{display: none !important; }</style>
 {% block css %}{% endblock %}
 </head>
 <body>
@@ -80,9 +81,8 @@
 </div>
 <div id="comment" class="comment">
 	<a class="close" href="javascript:;"><i class="icon-minus-circled"></i></a><p>回复</p>
-	<div id="commentText" class="edit-div comment-text" placeholder="评论" contenteditable="true" onpaste="return false" oncontextmenu="return false"></div>
-	<span></span>
-	<i id="replyComment" class="icon-paper-plane"></i>
+	<textarea id="commentText" name="commentText" class="comment-text" placeholder="评论"></textarea>
+	<span id="comtip" class="comtip"></span><i id="replyComment" class="icon-paper-plane"></i>
 </div>
 <input type="file" name="file" id="replaceUpload" class="replace-upload">
 <div id="overlay" class="overlay"></div>
@@ -108,7 +108,22 @@ var Host='{{host}}', PageTotal={{total||0}}, PageSize={{pageSize||0}}, FirstCoun
 </script>
 <script src="/lib/jquery.min.js"></script>
 <script src="/lib/qrcode.min.js"></script>
+<script src="/lib/ckeditor/ckeditor.js"></script>
 <script>{% include '../../public/lib/clipboard.min.js' %}</script>
+<script>
+	CKEDITOR.replace('commentText', {
+		extraPlugins: 'autogrow',
+		autoGrow_minHeight: 20,
+		removePlugins: 'resize'
+	});
+if(document.getElementById('content')){
+	CKEDITOR.replace('content', {
+		extraPlugins: 'autogrow',
+		autoGrow_minHeight: 20,
+		removePlugins: 'resize'
+	});
+}
+</script>
 <script>{% include '../../public/js/base.min.js' %}</script>
 {% block js %}{% endblock %}
 </body>
