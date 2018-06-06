@@ -1,7 +1,7 @@
 {% extends './layout/layout-user.html' %}
 {% block title %}{% if isSelf %}我{% else %}{{user.uname}}{% endif %}的插图-iDream{% endblock %}
 {% block js %}
-<script> var HasImg=2;</script>
+<script>var HasImg=2;var Suid='{{self.uid}}';</script>
 <script src="/js/{% if isSelf %}index.min.js{% else %}other.min.js{% endif %}"></script>
 {% endblock %}
 {% block left %}
