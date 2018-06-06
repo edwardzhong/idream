@@ -2,28 +2,16 @@
 {% block title %}编辑信息-iDream{% endblock %}
 {% block css %}
 <style>
-#cke_name{
-    width: 200px;
-    text-align: center;
-    margin: 20px auto;
+.trumbowyg-editor{
+    text-align: left;
     border-bottom: 1px solid #ddd;
-}
-#cke_intro{
-    width: 500px;
-    margin: 0 auto;
-    border-bottom: 1px solid #ddd;
+    width: 480px;
+    color: #666;
 }
 </style>
 <link rel="stylesheet" href="./lib/cropper/cropper.min.css">
 {% endblock %}
 {% block js %}
-<script>
-CKEDITOR.replace('intro', {
-    extraPlugins: 'autogrow',
-    autoGrow_minHeight: 20,
-    removePlugins: 'resize'
-});
-</script>
 <script src="./lib/cropper/cropper.min.js"></script>
 <script src="/js/profile.min.js"></script>
 {% endblock %}
@@ -35,7 +23,7 @@ CKEDITOR.replace('intro', {
     <div id="avatar" class="avatar">
         <img src="{{user.avatar||'/img/avatar.jpg'}}" alt="avatar">
     </div>
-    <input type="text" class="name" id="name" value="{{ruser.name}}">
+    <input type="text" class="name" id="name" value="{{ruser.name}}" autocomplete="off">
     <!-- <textarea name="name" id="name">{{ruser.name}}</textarea> -->
     <p class="label">我对梦的看法</p>
     <textarea name="intro" id="intro" class="intro">{{ruser.intro}}</textarea>
