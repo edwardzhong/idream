@@ -11,7 +11,7 @@
         <img src="{{user.avatar||'/img/avatar.jpg'}}" alt="avatar">
     </div>
     <h2 class="name">{{user.uname}}</h2>
-    <p class="desc">{{user.intro}}</p>
+    <div class="desc">{{user.intro}}</div>
     <div class="nav">
         <a {% if isIndex %}class="active" href="javascript:;"{% else %}href="/{%if isOther%}user/{{user.uid}}{%endif%}"{% endif %}>我的梦<span>{{user.feed_count}}</span></a>
         {% if user.feed_image_count > 0 %}

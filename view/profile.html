@@ -1,9 +1,34 @@
 {% extends './layout/layout-user.html' %}
 {% block title %}编辑信息-iDream{% endblock %}
 {% block css %}
+<style>
+#cke_name{
+    width: 200px;
+    text-align: center;
+    margin: 20px auto;
+    border-bottom: 1px solid #ddd;
+}
+#cke_intro{
+    width: 500px;
+    margin: 0 auto;
+    border-bottom: 1px solid #ddd;
+}
+</style>
 <link rel="stylesheet" href="./lib/cropper/cropper.min.css">
 {% endblock %}
 {% block js %}
+<script>
+CKEDITOR.replace('name', {
+    extraPlugins: 'autogrow',
+    autoGrow_minHeight: 20,
+    removePlugins: 'resize'
+});
+CKEDITOR.replace('intro', {
+    extraPlugins: 'autogrow',
+    autoGrow_minHeight: 20,
+    removePlugins: 'resize'
+});
+</script>
 <script src="./lib/cropper/cropper.min.js"></script>
 <script src="/js/profile.min.js"></script>
 {% endblock %}
@@ -15,9 +40,9 @@
     <div id="avatar" class="avatar">
         <img src="{{user.avatar||'/img/avatar.jpg'}}" alt="avatar">
     </div>
-    <div id="name" class="edit-div name" contenteditable="true" onpaste="return false" oncontextmenu="return false">{{ruser.uname}}</div>
+    <textarea name="name" id="name">{{ruser.name}}</textarea>
     <p class="label">我对梦的看法</p>
-    <div class="edit-div desc" id="intro" contenteditable="true" onpaste="return false" oncontextmenu="return false">{{ruser.intro}}</div>
+    <textarea name="intro" id="intro">{{ruser.intro}}</textarea>
     <div class="info">
         <p title="性别" class="clearfix">
             <div class="gender-label">

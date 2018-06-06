@@ -18,7 +18,7 @@
         <div class="img"><img src="{{img}}" alt=""></div>
         {% endfor %}
     </div>
-	<p class="text">{{article.content}}</p>
+	<div class="text">{{article.content}}</div>
     <div class="actions">
         {% if isSelf %}
         <i class="icon-eye-off private" title="私密" style="display:{% if article.show_type ==2 %}inline{%else%}none{%endif%};"></i>
@@ -64,7 +64,7 @@
         		<time class="fr">{{c.ctime}}</time>
         		<a href="/user/{{c.uid}}"><span>{{c.uname}}</span></a>
         	</div>
-        	<p>{{c.content}}</p>
+        	<div class="content">{{c.content}}</div>
         	<div class="actions">
                 <i data-tag="comment" data-rid="{{c.review_id}}" class="icon-comment" title="评论"></i><span></span>
                 {% if isSelf %}
@@ -91,7 +91,7 @@
         				<time class="fr">{{r.ctime}}</time>
         				<a href="/user/{{r.uid}}"><span>{{r.uname}}</span></a> | 回复 <a href="/user/{{r.to_uid}}"><span>{{r.to_uname}}</span></a>
         			</div>
-        			<p>{{r.content}}</p>
+        			<div class="content">{{r.content}}</div>
                     <div class="actions">
                         <i data-tag="comment" data-rid="{{c.review_id}}" class="icon-comment" title="评论"></i><span></span>
                         {% if isSelf %}

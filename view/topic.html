@@ -35,7 +35,7 @@
                 <div class="img"><img src="{{img}}" alt=""></div>
                 {% endfor %}
             </div>
-            <p>{{li.content}}</p>
+            <div class="content">{{li.content}}</div>
             <div class="actions">
                 {% if li.is_me == 1 %}
                 <i class="icon-eye-off private" title="私密" style="display:{% if li.show_type ==2%}inline{%else%}none{%endif%};"></i>
@@ -88,7 +88,7 @@
             <a href="/user/(uid)"><span>(uname)</span></a>
         </div>
         <div class="img-list">(imgs)</div>
-        <p>(content)</p>
+        <div class="content">(content)</div>
         <div class="actions">
             <i class="icon-eye-off private" title="私密" style="display:(pstyle);"></i>
             <i data-tag="up" data-id="(feed_id)" class="icon-heart (has_digg)" title="比心"></i><span>(digg_count)</span><i data-tag="comment" data-id="(feed_id)" class="icon-comment" title="评论"></i><span id="com(feed_id)">(comment_count)</span><i data-tag="share" class="icon-forward" title="传达"></i>
