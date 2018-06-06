@@ -120,6 +120,16 @@ $('#commentText').trumbowyg({
     autogrow: true,
     autogrowOnEnter: true
 });
+if(document.getElementById('content')){
+	$('#content').trumbowyg({
+	    svgPath: false,
+	    resetCss: true,
+	    removeformatPasted: true,
+	    hideButtonTexts: true,
+	    autogrow: true,
+	    autogrowOnEnter: true
+	});
+}
 </script>
 <script>{% include '../../public/js/base.min.js' %}</script>
 {% block js %}{% endblock %}
