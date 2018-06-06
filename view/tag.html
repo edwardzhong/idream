@@ -29,7 +29,7 @@
                 <div class="img"><img src="{{img}}" alt=""></div>
                 {% endfor %}
             </div>
-            <div class="content">{{li.content}}</div>
+            <div class="text">{{li.content}}</div>
             <div class="actions">
                 {% if isSelf %}
                 <i class="icon-eye-off private" title="私密" style="display:{% if li.show_type ==2%}inline{%else%}none{%endif%};"></i>
@@ -82,7 +82,7 @@
             <span>(uname)</span>
         </div>
         <div class="img-list">(imgs)</div>
-        <div class="content">(content)</div>
+        <div class="text">(content)</div>
         <div class="actions">
             {% if isSelf %}
             <i class="icon-eye-off private" title="私密" style="display:(pstyle);"></i>
