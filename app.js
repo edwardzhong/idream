@@ -43,7 +43,7 @@ app.use(favicon(__dirname + '/public/favicon.ico'));
 // set template engine
 app.context.render = co.wrap(render({
     root: __dirname + '/view',
-    cache: false,//'memory',
+    cache: 'memory',
     autoescape: false,
     ext: 'html',
     writeBody: false
