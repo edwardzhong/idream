@@ -10,8 +10,9 @@ module.exports = async function(ctx, next) {
 		let ret = await request(form);
 		ctx.body = await JSON.parse(ret);
 	} catch(err){
-        log.error(form);
-        log.error(err.message.substr(0,500));
+        err.form=form;
+        err.message=err.message.substr(0,500);
+        log.error(err);
         ctx.body = await {code:500,msg:htmlEncode(err.message.substr(0,200))};
 	}
 };

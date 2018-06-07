@@ -16,7 +16,7 @@ exports.login = async function(ctx, next) {
         ctx.body = await ret;
     } catch (err) {
         log.error(err);
-        ctx.body = await { code: 500, msg: '服务器错误,请稍后再试', err: err };
+        ctx.body = await { code: 500, msg: err.message };
     }
 };
 
@@ -42,7 +42,7 @@ exports.register = async function(ctx, next) {
         }
     } catch (err) {
         log.error(err);
-        ctx.body = await { code: 500, msg: '服务器错误,请稍后再试', err: err };
+        ctx.body = await { code: 500, msg: err.message };
     }
 };
 
@@ -63,6 +63,6 @@ exports.logout = async function(ctx, next) {
         ctx.body = await ret;
     } catch (err) {
         log.error(err);
-        ctx.body = await { code: 500, msg: '服务器错误,请稍后再试', err: err };
+        ctx.body = await { code: 500, msg: err.message };
     }
 };

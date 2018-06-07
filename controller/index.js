@@ -1,7 +1,7 @@
 const { request, initUser, initList } = require('../common/util');
 const log = require('../common/logger');
 const config = require('../config/app');
-var globleConfig = {
+const globleConfig = {
     host: config.url,
     pageSize: config.pageSize
 };
@@ -31,7 +31,7 @@ async function resIndex(ctx, next, name) {
         list = [];
     if (name) { listForm.has_img = 2; }
     try {
-        let ret = await Promise.all([request(userForm), request(listForm)]), //并行请求
+        let ret = await Promise.all([request(userForm), request(listForm)]), 
             userRet = JSON.parse(ret[0]),
             listRet = JSON.parse(ret[1]);
 
@@ -54,12 +54,13 @@ async function resIndex(ctx, next, name) {
         Object.assign(data, globleConfig);
         ctx.body = await ctx.render(name ? name : 'index', data);
     } catch (err) {
-        log.error(userForm);
-        log.error(listForm);
-        log.error(err.message.substr(0, 500));
-        ctx.status = 500;
-        ctx.statusText = 'Internal Server Error';
-        ctx.res.end(err.message);
+        let e=err;
+        Object.assign(e,{
+            message:err.message.substr(0, 500),
+            userForm:userForm,
+            listForm:listForm
+        });
+        ctx.throw(e);
     }
 }
 
@@ -141,12 +142,13 @@ async function resUser(ctx, next, name) {
         }, globleConfig);
         ctx.body = await ctx.render(name ? name : 'user', data);
     } catch (err) {
-        log.error(userForm);
-        log.error(listForm);
-        log.error(err.message.substr(0, 500));
-        ctx.status = 500;
-        ctx.statusText = 'Internal Server Error';
-        ctx.res.end(err.message);
+        let e=err;
+        Object.assign(e,{
+            message:err.message.substr(0, 500),
+            userForm:userForm,
+            listForm:listForm
+        });
+        ctx.throw(e);
     }
 }
 
@@ -223,12 +225,13 @@ exports.tag = async function(ctx, next) {
 
         ctx.body = await ctx.render('tag', data);
     } catch (err) {
-        log.error(userForm);
-        log.error(listForm);
-        log.error(err.message.substr(0, 500));
-        ctx.status = 500;
-        ctx.statusText = 'Internal Server Error';
-        ctx.res.end(err.message);
+        let e=err;
+        Object.assign(e,{
+            message:err.message.substr(0, 500),
+            userForm:userForm,
+            listForm:listForm
+        });
+        ctx.throw(e); 
     }
 };
 
@@ -268,11 +271,12 @@ exports.edit = async function(ctx, next) {
         }
 
     } catch (err) {
-        log.error(form);
-        log.error(err.message.substr(0, 500));
-        ctx.status = 500;
-        ctx.statusText = 'Internal Server Error';
-        ctx.res.end(err.message);
+        let e=err;
+        Object.assign(e,{
+            message:err.message.substr(0, 500),
+            form:form
+        });
+        ctx.throw(e);
     }
 };
 
@@ -333,11 +337,13 @@ exports.article = async function(ctx, next) {
 
         ctx.body = await ctx.render('article', data);
     } catch (err) {
-        log.error(form);
-        log.error(err.message.substr(0, 500));
-        ctx.status = 500;
-        ctx.statusText = 'Internal Server Error';
-        ctx.res.end(err.message);
+        let e=err;
+        Object.assign(e,{
+            message:err.message.substr(0, 500),
+            selfForm:selfForm,
+            form:form
+        });
+        ctx.throw(e);
     }
 };
 
@@ -382,12 +388,14 @@ exports.explore = async function(ctx, next) {
 
         ctx.body = await ctx.render('explore', data);
     } catch (err) {
-        log.error(selfForm);
-        log.error(form);
-        log.error(err.message.substr(0, 500));
-        ctx.status = 500;
-        ctx.statusText = 'Internal Server Error';
-        ctx.res.end(err.message);
+        let e=err;
+        Object.assign(e,{
+            message:err.message.substr(0, 500),
+            selfForm:selfForm,
+            form:form
+        });
+
+        ctx.throw(e);
     }
 };
 
@@ -437,12 +445,13 @@ exports.topic = async function(ctx, next) {
 
         ctx.body = await ctx.render('topic', data);
     } catch (err) {
-        log.error(selfForm);
-        log.error(form);
-        log.error(err.message.substr(0, 500));
-        ctx.status = 500;
-        ctx.statusText = 'Internal Server Error';
-        ctx.res.end(err.message);
+        let e=err;
+        Object.assign(e,{
+            message:err.message.substr(0, 500),
+            selfForm:selfForm,
+            form:form
+        });
+        ctx.throw(e);
     }
 };
 
@@ -469,12 +478,11 @@ exports.search = async function(ctx, next) {
 
         ctx.body = await ctx.render('search', data);
     } catch (err) {
-        log.error(selfForm);
-        log.error(form);
-        log.error(err.message.substr(0, 500));
-        ctx.status = 500;
-        ctx.statusText = 'Internal Server Error';
-        ctx.res.end(err.message);
+        let e=err;
+        Object.assign(e,{
+            message:err.message.substr(0, 500)
+        });
+        ctx.throw(e);
     }
 };
 
@@ -507,7 +515,6 @@ exports.notice = async function(ctx, next) {
         let data = {
             isNotice: true,
             isLogin: true,
-            // isNew: self.unread_count ? true : false,
             isNew: false,
             self: self,
             list: list,
@@ -517,11 +524,13 @@ exports.notice = async function(ctx, next) {
         Object.assign(data, globleConfig);
         ctx.body = await ctx.render('notice', data);
     } catch (err) {
-        log.error(selfForm);
-        log.error(listForm);
-        log.error(err.message.substr(0, 500));
-        ctx.status = 500;
-        ctx.statusText = 'Internal Server Error';
-        ctx.res.end(err.message);
+        let e=err;
+        Object.assign(e,{
+            message:err.message.substr(0, 500),
+            selfForm:selfForm,
+            listForm:listForm
+        });
+
+        ctx.throw(e);
     }
 };

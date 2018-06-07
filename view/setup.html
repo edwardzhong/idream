@@ -1,5 +1,15 @@
 {% extends './layout/layout-user.html' %}
 {% block title %}设置-iDream{% endblock %}
+{% block css %}
+<style>
+.trumbowyg-editor{
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    width: 400px;
+    color: #666;
+}
+</style>
+{% endblock %}
 {% block js %}
 <script src="/js/setup.min.js"></script>
 {% endblock %}
@@ -19,7 +29,7 @@
         <div class="about">
             <h3>你的建议</h3>
             <input id="title" class="text" type="text" placeholder="关于" maxlength="100"><br>
-            <div class="edit-div" id="content" contenteditable="true" placeholder="具体内容" onpaste="return false" oncontextmenu="return false"></div>
+            <div id="content" placeholder="具体内容"></div>
             <div class="btn-wrap">
                 <i id="btnAbout" class="icon-paper-plane"></i>
             </div>

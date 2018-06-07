@@ -43,7 +43,7 @@ app.use(favicon(__dirname + '/public/favicon.ico'));
 // set template engine
 app.context.render = co.wrap(render({
     root: __dirname + '/view',
-    cache: false,
+    cache: false,//'memory',
     autoescape: false,
     ext: 'html',
     writeBody: false
@@ -56,11 +56,13 @@ app.use(router.routes())
 
 // koa already had middleware to deal with the error, rigister the error event
 app.on('error', (err, ctx) => {
+    log.error(err);
     ctx.status = 500;
     ctx.statusText = 'Internal Server Error';
-    log.error(err);
     if (config.env === 'dev') { //throw the error to frontEnd when in the develop mode
         ctx.res.end(err.message); //finish the response
+    } else {
+        ctx.res.end('Server Error');
     }
 });
 

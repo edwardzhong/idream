@@ -2,7 +2,7 @@
  * app config
  */
 module.exports = {
-    env: 'env',
+    env: 'dev',
     port: 8282,
     url:'http://localhost:8282',
     proxy: {

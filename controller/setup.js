@@ -1,7 +1,7 @@
 const { request,initUser } = require('../common/util');
 const log = require('../common/logger');
 const config = require('../config/app');
-var globleConfig = {
+const globleConfig = {
     host: config.url,
     pageSize: config.pageSize
 };
@@ -11,14 +11,14 @@ var globleConfig = {
  * profile
  */
 exports.profile = async function(ctx, next) {
-    return resProfile(ctx,next);
+    await resProfile(ctx,next);
 };
 
 /**
  * setup
  */
 exports.setup=async function(ctx,next){
-    return resProfile(ctx,next,'setup');
+    await resProfile(ctx,next,'setup');
 }
 
 async function resProfile(ctx,next,name){
@@ -50,11 +50,12 @@ async function resProfile(ctx,next,name){
         Object.assign(data, globleConfig);
         ctx.body = await ctx.render(name?name:'profile', data);
     } catch (err) {
-        log.error(selfForm);
-        log.error(err.message.substr(0, 500));
-        ctx.status = 500;
-        ctx.statusText = 'Internal Server Error';
-        ctx.res.end(err.message);
+        let e=err;
+        Object.assign(e,{
+            message:err.message.substr(0, 500),
+            selfForm:selfForm
+        });
+        ctx.throw(e);
     }
 
 }
@@ -63,14 +64,14 @@ async function resProfile(ctx,next,name){
  * private
  */
 exports.private=async function(ctx,next){
-    return resForbit(ctx,next);
+    await resForbit(ctx,next);
 }
 
 /**
  * forbit
  */
 exports.black=async function(ctx,next){
-    return resForbit(ctx,next,true);
+    await resForbit(ctx,next,true);
 };
 
 async function resForbit(ctx,next,isBlack){
@@ -99,11 +100,12 @@ async function resForbit(ctx,next,isBlack){
         Object.assign(data, globleConfig);
         ctx.body = await ctx.render('forbit', data);
     } catch (err) {
-        log.error(selfForm);
-        log.error(err.message.substr(0, 500));
-        ctx.status = 500;
-        ctx.statusText = 'Internal Server Error';
-        ctx.res.end(err.message);
+        let e=err;
+        Object.assign(e,{
+            message:err.message.substr(0, 500),
+            selfForm:selfForm,
+        });
+        ctx.throw(e);
     }
 };
 

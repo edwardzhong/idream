@@ -22,7 +22,7 @@ function get(url) {
                 reject(err)
             });
         });
-    })
+    });
 }
 
 /**
@@ -52,7 +52,7 @@ function request(form) {
             res.on('end', () => {
                 let firstCode = body.charCodeAt(0);  
                 if (firstCode !=123) {
-                    reject({message:'server return unexpect data: '+body});
+                    reject(new Error('server return unexpect data: '+body));
                 }
                 resolve(body);
             });
