@@ -115,8 +115,7 @@ async function resUser(ctx, next, name) {
             return ctx.redirect('/private');
         }
         if (userRet.data.black_list) {
-            if (userRet.data.black_list.some(i => {
-                    return self.uid && i.uid == self.uid })) {
+            if (userRet.data.black_list.some(i => self.uid && i.uid == self.uid )) {
                 return ctx.redirect('/black');
             }
         }
@@ -196,8 +195,7 @@ exports.tag = async function(ctx, next) {
                 return ctx.redirect('/private');
             }
             if (userRet.data.black_list) {
-                if (userRet.data.black_list.some(i => {
-                    return self.uid && i.uid == self.uid })) {
+                if (userRet.data.black_list.some(i => self.uid && i.uid == self.uid )) {
                     return ctx.redirect('/black');
                 }
             }
@@ -318,8 +316,7 @@ exports.article = async function(ctx, next) {
                 return ctx.redirect('/private');
             }
             if (user.black_list) {
-                if (user.black_list.some(i => {
-                        return self.uid && i.uid == self.uid })) {
+                if (user.black_list.some(i => self.uid && i.uid == self.uid )) {
                     return ctx.redirect('/black');
                 }
             }  
