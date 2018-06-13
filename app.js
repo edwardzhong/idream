@@ -11,11 +11,24 @@ const favicon = require('koa-favicon');
 const addRouters = require('./router');
 const config = require('./config/app');
 const log = require('./common/logger');
-const staticCache = require('koa-static-cache')
+const staticCache = require('koa-static-cache');
+const compress = require('koa-compress');
 
+
+//cache
 app.use(staticCache(__dirname + '/public/lib'), {
-  maxAge: 365 * 24 * 60 * 60
+  maxAge: 365 * 24 * 60 * 60,
+  gzip:true
 });
+
+// gzip
+app.use(compress({
+  filter: function (content_type) {
+    return /text|javascript/i.test(content_type)
+  },
+  threshold: 2048,
+  flush: require('zlib').Z_SYNC_FLUSH
+}));
 
 // diplay access records
 app.use(logger());
