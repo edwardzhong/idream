@@ -82,7 +82,7 @@ async function resUser(ctx, next, name) {
     let id = ctx.params.id;
     if (!id) return;
     let selfForm = { r: '/user/get-user-info' }
-    userForm = { r: '/user/get-user-info', uid: id },
+        userForm = { r: '/user/get-user-info', uid: id },
         listForm = { r: '/user/get-user-home', uid: id, page_size: config.pageSize },
         self = {},
         user = {},
@@ -164,7 +164,7 @@ exports.tag = async function(ctx, next) {
         user = {},
         self = {},
         list = [];
-    total = 0,
+        total = 0,
         data = { isLogin: false, isNew: false };
 
     if (!uid || !tag) return;

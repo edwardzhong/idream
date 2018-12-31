@@ -13,7 +13,7 @@
     <h2 class="name">{{user.uname}}</h2>
     <div class="desc">{{user.intro}}</div>
     <div class="nav">
-        <a {% if isIndex %}class="active" href="javascript:;"{% else %}href="/{%if isOther%}user/{{user.uid}}{%endif%}"{% endif %}>我的梦<span>{{user.feed_count}}</span></a>
+        <a {% if isIndex %}class="active" href="javascript:;"{% else %}href="/{%if isOther%}user/{{user.uid}}{%endif%}"{% endif %}>{%if isOther%}梦境{%else%}我的梦{%endif%}<span>{{user.feed_count}}</span></a>
         {% if user.feed_image_count > 0 %}
         <a {% if isPic %}class="active"{% else %}href="/picture{%if isOther%}/{{user.uid}}{%endif%}"{% endif %}>插图<span>{{user.feed_image_count}}</span></a>
         {% endif %}
