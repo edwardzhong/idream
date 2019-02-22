@@ -14,20 +14,19 @@ const log = require('./common/logger');
 const staticCache = require('koa-static-cache');
 const compress = require('koa-compress');
 
-
 //cache
 app.use(staticCache(__dirname + '/public/lib'), {
-  maxAge: 365 * 24 * 60 * 60,
-  gzip:true
+    maxAge: 365 * 24 * 60 * 60,
+    gzip: true
 });
 
 // gzip
 app.use(compress({
-  filter: function (content_type) {
-    return /text|javascript/i.test(content_type)
-  },
-  threshold: 2048,
-  flush: require('zlib').Z_SYNC_FLUSH
+    filter: function (content_type) {
+        return /text|javascript/i.test(content_type)
+    },
+    threshold: 2048,
+    flush: require('zlib').Z_SYNC_FLUSH
 }));
 
 // diplay access records
@@ -80,7 +79,7 @@ app.on('error', (err, ctx) => {
 });
 
 // deal 404
-app.use(async(ctx, next) => {
+app.use(async (ctx, next) => {
     ctx.status = 404;
     ctx.body = await ctx.render('404');
 });

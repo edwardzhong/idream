@@ -9,14 +9,14 @@ const globleConfig = {
 /**
  * home (my)
  */
-exports.index = async function(ctx, next) {
+exports.index = async function (ctx, next) {
     return resIndex(ctx, next);
 };
 
 /**
  * my picture
  */
-exports.mypicture = async function(ctx, next) {
+exports.mypicture = async function (ctx, next) {
     return resIndex(ctx, next, 'picture');
 };
 
@@ -31,7 +31,7 @@ async function resIndex(ctx, next, name) {
         list = [];
     if (name) { listForm.has_img = 2; }
     try {
-        let ret = await Promise.all([request(userForm), request(listForm)]), 
+        let ret = await Promise.all([request(userForm), request(listForm)]),
             userRet = JSON.parse(ret[0]),
             listRet = JSON.parse(ret[1]);
 
@@ -54,11 +54,11 @@ async function resIndex(ctx, next, name) {
         Object.assign(data, globleConfig);
         ctx.body = await ctx.render(name ? name : 'index', data);
     } catch (err) {
-        let e=err;
-        Object.assign(e,{
-            message:err.message.substr(0, 500),
-            userForm:userForm,
-            listForm:listForm
+        let e = err;
+        Object.assign(e, {
+            message: err.message.substr(0, 500),
+            userForm: userForm,
+            listForm: listForm
         });
         ctx.throw(e);
     }
@@ -67,14 +67,14 @@ async function resIndex(ctx, next, name) {
 /**
  * user
  */
-exports.user = async function(ctx, next) {
+exports.user = async function (ctx, next) {
     return resUser(ctx, next);
 };
 
 /**
  * user picture
  */
-exports.picture = async function(ctx, next) {
+exports.picture = async function (ctx, next) {
     return resUser(ctx, next, 'picture');
 };
 
@@ -82,7 +82,7 @@ async function resUser(ctx, next, name) {
     let id = ctx.params.id;
     if (!id) return;
     let selfForm = { r: '/user/get-user-info' }
-        userForm = { r: '/user/get-user-info', uid: id },
+    userForm = { r: '/user/get-user-info', uid: id },
         listForm = { r: '/user/get-user-home', uid: id, page_size: config.pageSize },
         self = {},
         user = {},
@@ -115,7 +115,7 @@ async function resUser(ctx, next, name) {
             return ctx.redirect('/private');
         }
         if (userRet.data.black_list) {
-            if (userRet.data.black_list.some(i => self.uid && i.uid == self.uid )) {
+            if (userRet.data.black_list.some(i => self.uid && i.uid == self.uid)) {
                 return ctx.redirect('/black');
             }
         }
@@ -141,11 +141,11 @@ async function resUser(ctx, next, name) {
         }, globleConfig);
         ctx.body = await ctx.render(name ? name : 'user', data);
     } catch (err) {
-        let e=err;
-        Object.assign(e,{
-            message:err.message.substr(0, 500),
-            userForm:userForm,
-            listForm:listForm
+        let e = err;
+        Object.assign(e, {
+            message: err.message.substr(0, 500),
+            userForm: userForm,
+            listForm: listForm
         });
         ctx.throw(e);
     }
@@ -155,7 +155,7 @@ async function resUser(ctx, next, name) {
 /**
  * tag list
  */
-exports.tag = async function(ctx, next) {
+exports.tag = async function (ctx, next) {
     let uid = ctx.params.uid,
         tag = ctx.params.tag,
         selfForm = { r: '/user/get-user-info' },
@@ -164,7 +164,7 @@ exports.tag = async function(ctx, next) {
         user = {},
         self = {},
         list = [];
-        total = 0,
+    total = 0,
         data = { isLogin: false, isNew: false };
 
     if (!uid || !tag) return;
@@ -190,12 +190,12 @@ exports.tag = async function(ctx, next) {
         let ret = await Promise.all([request(userForm), request(listForm)]),
             userRet = JSON.parse(ret[0]),
             listRet = JSON.parse(ret[1]);
-        if(data.isOther){
+        if (data.isOther) {
             if (userRet.data.is_show == 2) {
                 return ctx.redirect('/private');
             }
             if (userRet.data.black_list) {
-                if (userRet.data.black_list.some(i => self.uid && i.uid == self.uid )) {
+                if (userRet.data.black_list.some(i => self.uid && i.uid == self.uid)) {
                     return ctx.redirect('/black');
                 }
             }
@@ -223,20 +223,20 @@ exports.tag = async function(ctx, next) {
 
         ctx.body = await ctx.render('tag', data);
     } catch (err) {
-        let e=err;
-        Object.assign(e,{
-            message:err.message.substr(0, 500),
-            userForm:userForm,
-            listForm:listForm
+        let e = err;
+        Object.assign(e, {
+            message: err.message.substr(0, 500),
+            userForm: userForm,
+            listForm: listForm
         });
-        ctx.throw(e); 
+        ctx.throw(e);
     }
 };
 
 /**
  * edit article
  */
-exports.edit = async function(ctx, next) {
+exports.edit = async function (ctx, next) {
     var id = ctx.params.id;
     if (!id) return;
     if (!ctx.session || !ctx.session.user) {
@@ -269,10 +269,10 @@ exports.edit = async function(ctx, next) {
         }
 
     } catch (err) {
-        let e=err;
-        Object.assign(e,{
-            message:err.message.substr(0, 500),
-            form:form
+        let e = err;
+        Object.assign(e, {
+            message: err.message.substr(0, 500),
+            form: form
         });
         ctx.throw(e);
     }
@@ -281,7 +281,7 @@ exports.edit = async function(ctx, next) {
 /**
  * view article
  */
-exports.article = async function(ctx, next) {
+exports.article = async function (ctx, next) {
     let id = ctx.params.id,
         selfForm = { r: '/user/get-user-info' },
         form = { r: '/feed/feed-info', feed_id: id },
@@ -311,15 +311,15 @@ exports.article = async function(ctx, next) {
             self = initUser(self);
             data.isOther = true;
         }
-        if(data.isOther){
+        if (data.isOther) {
             if (user.is_show == 2) {
                 return ctx.redirect('/private');
             }
             if (user.black_list) {
-                if (user.black_list.some(i => self.uid && i.uid == self.uid )) {
+                if (user.black_list.some(i => self.uid && i.uid == self.uid)) {
                     return ctx.redirect('/black');
                 }
-            }  
+            }
         }
         if (!self.uid) { Object.assign(self, user); }
         Object.assign(comments, ret.data.review);
@@ -334,11 +334,11 @@ exports.article = async function(ctx, next) {
 
         ctx.body = await ctx.render('article', data);
     } catch (err) {
-        let e=err;
-        Object.assign(e,{
-            message:err.message.substr(0, 500),
-            selfForm:selfForm,
-            form:form
+        let e = err;
+        Object.assign(e, {
+            message: err.message.substr(0, 500),
+            selfForm: selfForm,
+            form: form
         });
         ctx.throw(e);
     }
@@ -347,7 +347,7 @@ exports.article = async function(ctx, next) {
 /**
  * explore
  */
-exports.explore = async function(ctx, next) {
+exports.explore = async function (ctx, next) {
     let form = { r: '/feed/explore', page_size: config.pageSize },
         selfForm = { r: '/user/get-user-info' },
         self = {},
@@ -385,11 +385,11 @@ exports.explore = async function(ctx, next) {
 
         ctx.body = await ctx.render('explore', data);
     } catch (err) {
-        let e=err;
-        Object.assign(e,{
-            message:err.message.substr(0, 500),
-            selfForm:selfForm,
-            form:form
+        let e = err;
+        Object.assign(e, {
+            message: err.message.substr(0, 500),
+            selfForm: selfForm,
+            form: form
         });
 
         ctx.throw(e);
@@ -399,17 +399,18 @@ exports.explore = async function(ctx, next) {
 /**
  * topic
  */
-exports.topic = async function(ctx, next) {
+exports.topic = async function (ctx, next) {
     let keyword = ctx.params.kw
     if (!keyword) {
-        return; }
+        return;
+    }
     // keyword = keyword;
     let form = { r: '/user/get-topic-list', topic_name: keyword, page_size: config.pageSize },
         selfForm = { r: '/user/get-user-info' },
         self = {},
         list = [],
         total = 0,
-        data = { isNew: false};
+        data = { isNew: false };
     if (!ctx.session || !ctx.session.user) {
         return ctx.redirect('/login');
     }
@@ -442,18 +443,18 @@ exports.topic = async function(ctx, next) {
 
         ctx.body = await ctx.render('topic', data);
     } catch (err) {
-        let e=err;
-        Object.assign(e,{
-            message:err.message.substr(0, 500),
-            selfForm:selfForm,
-            form:form
+        let e = err;
+        Object.assign(e, {
+            message: err.message.substr(0, 500),
+            selfForm: selfForm,
+            form: form
         });
         ctx.throw(e);
     }
 };
 
-exports.search = async function(ctx, next) {
-    let kw = ctx.query.kw||'';
+exports.search = async function (ctx, next) {
+    let kw = ctx.query.kw || '';
     if (!ctx.session || !ctx.session.user) {
         return ctx.redirect('/login');
     }
@@ -475,9 +476,9 @@ exports.search = async function(ctx, next) {
 
         ctx.body = await ctx.render('search', data);
     } catch (err) {
-        let e=err;
-        Object.assign(e,{
-            message:err.message.substr(0, 500)
+        let e = err;
+        Object.assign(e, {
+            message: err.message.substr(0, 500)
         });
         ctx.throw(e);
     }
@@ -486,7 +487,7 @@ exports.search = async function(ctx, next) {
 /**
  * notice
  */
-exports.notice = async function(ctx, next) {
+exports.notice = async function (ctx, next) {
     if (!ctx.session || !ctx.session.user) {
         return ctx.redirect('/login');
     }
@@ -521,11 +522,11 @@ exports.notice = async function(ctx, next) {
         Object.assign(data, globleConfig);
         ctx.body = await ctx.render('notice', data);
     } catch (err) {
-        let e=err;
-        Object.assign(e,{
-            message:err.message.substr(0, 500),
-            selfForm:selfForm,
-            listForm:listForm
+        let e = err;
+        Object.assign(e, {
+            message: err.message.substr(0, 500),
+            selfForm: selfForm,
+            listForm: listForm
         });
 
         ctx.throw(e);
