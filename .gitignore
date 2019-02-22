@@ -6,6 +6,5 @@ public/less
 public/rev
 public/sourcejs
 logs
-gulpfile.js
 *.log
 .DS_Store
